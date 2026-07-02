@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>KAIVO Real Estate — Inversiones y Propiedades Premium en Aguascalientes</title>
+<meta name="description" content="Especialistas en preventas y propiedades residenciales top en Aguascalientes. Te ayudamos a invertir con seguridad, ahorrar dinero y evitar estafas."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  /* Paleta neutra elegante — warm charcoal + champagne */
+  --bg:#09090a;--s:#101012;--card:#161618;--b:#252528;--b2:#1c1c1e;
+  --silver:#a8a4a0;--s2:#68645f;
+  --w:#f0ece6;--w2:#c0bbb4;
+  --accent:#c9b89a;--accent2:#a8987a;
+  --r:12px;--fs:cubic-bezier(.22,.68,0,1.2);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--w);font-family:'Inter',sans-serif;overflow-x:hidden}
+h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:500;line-height:1.15}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+button{cursor:pointer;border:none;font-family:'Inter',sans-serif}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:900;padding:0 5%;display:flex;align-items:center;justify-content:space-between;height:72px;background:rgba(9,9,10,.88);backdrop-filter:blur(20px);border-bottom:1px solid rgba(201,184,154,.1)}
+/* LOGO — tipografía pura igual al logo real */
+.logo{display:flex;flex-direction:column;align-items:flex-start;cursor:pointer;user-select:none;line-height:1;gap:2px}
+.logo-kaivo{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:26px;letter-spacing:8px;color:var(--w);text-transform:uppercase;line-height:1}
+.logo-re{font-size:8.5px;letter-spacing:5px;color:var(--silver);text-transform:uppercase;font-family:'Inter',sans-serif;font-weight:400;padding-left:2px}
+.nav-links{display:flex;gap:32px;align-items:center}
+.nav-links a{font-size:11.5px;letter-spacing:1.8px;color:var(--s2);transition:color .3s;text-transform:uppercase;font-weight:400}
+.nav-links a:hover{color:var(--accent)}
+.nav-cta{background:transparent;border:1px solid rgba(201,184,154,.4);color:var(--accent);padding:9px 22px;border-radius:4px;font-size:11px;font-weight:500;letter-spacing:2px;text-transform:uppercase;transition:all .3s;cursor:pointer;font-family:'Inter',sans-serif}
+.nav-cta:hover{background:var(--accent);color:var(--bg)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer}
+.hamburger span{width:22px;height:1px;background:var(--w);transition:all .3s}
+.mob-menu{display:none;position:fixed;inset:72px 0 0 0;background:rgba(9,9,10,.97);z-index:899;flex-direction:column;align-items:center;justify-content:center;gap:36px;backdrop-filter:blur(20px)}
+.mob-menu.open{display:flex}
+.mob-menu a{font-size:24px;font-family:'Cormorant Garamond',serif;font-weight:300;color:var(--w2);letter-spacing:4px;text-transform:uppercase;transition:color .3s}
+.mob-menu a:hover{color:var(--accent)}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;padding:120px 5% 100px}
+.hero-bg{position:absolute;inset:0;background-image:url('342ae4230a5faed9cb9c856353e31677.jpg');background-size:cover;background-position:center 30%;transform:scale(1.08)}
+.hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(110deg,rgba(9,9,10,.92) 0%,rgba(9,9,10,.65) 55%,rgba(9,9,10,.35) 100%)}
+.hero-content{position:relative;z-index:2;max-width:740px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(201,184,154,.08);border:1px solid rgba(201,184,154,.22);border-radius:2px;padding:7px 18px;margin-bottom:32px;animation:fadeUp .9s var(--fs) both}
+.hero-badge span{width:5px;height:5px;background:var(--accent);border-radius:50%;animation:pulse 2.5s infinite}
+.hero-badge p{font-size:10px;letter-spacing:2.5px;color:var(--accent);text-transform:uppercase}
+.hero h1{font-size:clamp(2.8rem,6.5vw,5.4rem);color:var(--w);margin-bottom:24px;animation:fadeUp .9s .15s var(--fs) both;line-height:1.06;font-weight:300}
+.hero h1 em{color:var(--accent);font-style:italic}
+.hero p.sub{font-size:clamp(.95rem,1.6vw,1.15rem);color:var(--w2);line-height:1.85;max-width:520px;margin-bottom:44px;animation:fadeUp .9s .3s var(--fs) both;font-weight:300}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;animation:fadeUp .9s .45s var(--fs) both}
+.btn-primary{background:var(--accent);color:var(--bg);padding:15px 34px;border-radius:3px;font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;transition:all .3s;display:inline-flex;align-items:center;gap:8px;cursor:pointer;border:none;font-family:'Inter',sans-serif}
+.btn-primary:hover{background:var(--w);transform:translateY(-2px);box-shadow:0 14px 40px rgba(201,184,154,.2)}
+.btn-ghost{border:1px solid rgba(168,164,160,.25);color:var(--silver);padding:15px 34px;border-radius:3px;font-size:12px;letter-spacing:2px;text-transform:uppercase;transition:all .3s;display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.03);cursor:pointer;font-family:'Inter',sans-serif}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent);background:rgba(201,184,154,.05)}
+.hero-stats{position:absolute;bottom:52px;left:5%;right:5%;display:flex;gap:48px;z-index:2;animation:fadeUp .9s .6s var(--fs) both;flex-wrap:wrap}
+.hero-stat strong{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:300;color:var(--accent);display:block;line-height:1}
+.hero-stat span{font-size:10px;letter-spacing:2.5px;color:var(--s2);text-transform:uppercase;margin-top:4px;display:block}
+
+/* ── TICKER ── */
+.ticker{background:var(--accent);overflow:hidden;height:36px;display:flex;align-items:center}
+.ticker-inner{display:flex;animation:ticker 32s linear infinite;white-space:nowrap}
+.ticker-inner span{padding:0 44px;font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--bg)}
+.ticker-inner span::after{content:'·';margin-left:44px;opacity:.4}
+
+/* ── SECCIONES BASE ── */
+section{padding:100px 5%}
+.section-tag{font-size:10px;letter-spacing:3.5px;color:var(--accent);text-transform:uppercase;margin-bottom:16px;display:block}
+.section-title{font-size:clamp(2rem,4vw,3.4rem);color:var(--w);margin-bottom:20px;line-height:1.12;font-weight:300}
+.section-sub{font-size:1rem;color:var(--s2);line-height:1.85;max-width:560px}
+.divider{width:40px;height:1px;background:var(--accent);opacity:.5;margin:20px 0}
+
+/* ── PROPUESTA DE VALOR ── */
+.valor{background:var(--s);display:grid;grid-template-columns:1fr 1fr;gap:0;align-items:stretch}
+.valor-left{padding:100px 8%;display:flex;flex-direction:column;justify-content:center}
+.valor-right{position:relative;overflow:hidden;min-height:520px}
+.valor-right img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.valor-right::after{content:'';position:absolute;left:0;top:0;bottom:0;width:45%;background:linear-gradient(to right,var(--s),transparent)}
+.pillars{margin-top:48px;display:flex;flex-direction:column;gap:32px}
+.pillar{display:flex;gap:20px;align-items:flex-start}
+.pillar-icon{width:44px;height:44px;min-width:44px;background:rgba(201,184,154,.07);border:1px solid rgba(201,184,154,.15);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.pillar h4{font-family:'Inter',sans-serif;font-size:.83rem;font-weight:600;color:var(--w);margin-bottom:6px;letter-spacing:.8px;text-transform:uppercase}
+.pillar p{font-size:.82rem;color:var(--s2);line-height:1.75}
+
+/* ── SERVICIOS ── */
+.servicios{background:var(--bg)}
+.serv-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;margin-top:56px;border:1px solid var(--b);border-radius:var(--r);overflow:hidden}
+.serv-card{background:var(--card);padding:36px 32px;transition:all .4s;position:relative;overflow:hidden}
+.serv-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--accent),transparent);transform:scaleX(0);transform-origin:left;transition:transform .5s}
+.serv-card:hover{background:var(--s);z-index:1}
+.serv-card:hover::before{transform:scaleX(1)}
+.serv-icon{font-size:1.8rem;margin-bottom:20px;opacity:.8}
+.serv-card h3{font-size:1.35rem;margin-bottom:12px;color:var(--w);font-weight:400}
+.serv-card p{font-size:.82rem;color:var(--s2);line-height:1.85}
+
+/* ── PREVENTA ── */
+.preventa{background:var(--s)}
+.preventa-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:56px;flex-wrap:wrap;gap:24px}
+.proj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:2px;border:1px solid var(--b);border-radius:16px;overflow:hidden}
+.proj-card{background:var(--card);overflow:hidden;transition:all .4s;cursor:pointer;position:relative}
+.proj-card::after{content:'';position:absolute;inset:0;border:1px solid transparent;transition:border-color .4s;pointer-events:none;border-radius:0}
+.proj-card:hover{background:var(--b2);z-index:1}
+.proj-card:hover::after{border-color:rgba(201,184,154,.2)}
+.proj-img{height:240px;overflow:hidden;position:relative}
+.proj-img img{width:100%;height:100%;object-fit:cover;transition:transform .7s}
+.proj-card:hover .proj-img img{transform:scale(1.05)}
+.proj-badge{position:absolute;top:14px;left:14px;background:rgba(9,9,10,.75);border:1px solid rgba(201,184,154,.3);color:var(--accent);font-size:9px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;padding:5px 12px;border-radius:2px;backdrop-filter:blur(8px)}
+.proj-body{padding:28px}
+.proj-dev{font-size:9.5px;letter-spacing:3px;color:var(--s2);text-transform:uppercase;margin-bottom:8px}
+.proj-body h3{font-size:1.5rem;color:var(--w);margin-bottom:10px;font-weight:400}
+.proj-desc{font-size:.81rem;color:var(--s2);line-height:1.8;margin-bottom:20px}
+.proj-specs{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--b)}
+.proj-spec{font-size:.75rem;color:var(--w2)}
+.proj-price{font-family:'Cormorant Garamond',serif;font-size:1.7rem;color:var(--accent);margin-bottom:16px;font-weight:300}
+.proj-cta{width:100%;padding:12px;background:transparent;border:1px solid rgba(201,184,154,.2);border-radius:3px;color:var(--silver);font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:500;transition:all .3s;font-family:'Inter',sans-serif;cursor:pointer}
+.proj-cta:hover{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+
+/* ── RESIDENCIAL ── */
+.residencial{background:var(--bg)}
+.res-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:56px;flex-wrap:wrap;gap:24px}
+.prop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:24px}
+.prop-card{background:var(--card);border-radius:var(--r);overflow:hidden;border:1px solid var(--b);transition:all .4s;cursor:pointer}
+.prop-card:hover{transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,.5);border-color:rgba(201,184,154,.18)}
+.prop-img{height:220px;overflow:hidden;position:relative;background:var(--b2)}
+.prop-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.prop-card:hover .prop-img img{transform:scale(1.05)}
+.prop-tag{position:absolute;top:12px;left:12px;background:rgba(9,9,10,.8);border:1px solid rgba(201,184,154,.25);color:var(--accent);font-size:9px;font-weight:600;letter-spacing:2px;padding:4px 10px;border-radius:2px;text-transform:uppercase}
+.prop-body{padding:22px}
+.prop-body h3{font-size:1.2rem;margin-bottom:6px;color:var(--w);font-weight:400}
+.prop-location{font-size:.75rem;color:var(--s2);margin-bottom:12px;display:flex;align-items:center;gap:5px}
+.prop-features{display:flex;gap:14px;margin-bottom:16px;flex-wrap:wrap}
+.feat{font-size:.74rem;color:var(--w2);display:flex;align-items:center;gap:4px}
+.prop-price{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--accent);font-weight:300}
+.prop-cta-row{display:flex;gap:8px;margin-top:14px}
+.prop-btn{flex:1;padding:9px 0;border-radius:3px;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;transition:all .3s;font-family:'Inter',sans-serif;cursor:pointer}
+.prop-btn.prim{background:var(--accent);color:var(--bg);border:none}
+.prop-btn.prim:hover{background:var(--w)}
+.prop-btn.sec{background:transparent;border:1px solid var(--b);color:var(--s2)}
+.prop-btn.sec:hover{border-color:var(--accent);color:var(--accent)}
+.empty-state{text-align:center;padding:80px 20px;color:var(--s2);grid-column:1/-1}
+.empty-state p{font-size:1rem;margin-bottom:8px}
+.empty-state small{font-size:.8rem;opacity:.6}
+
+/* ── NOSOTROS ── */
+.nosotros{background:var(--s)}
+.nos-inner{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+/* photo grid instead of single portrait */
+.nos-photos{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:8px;height:560px}
+.nos-photo{overflow:hidden;border-radius:3px;position:relative}
+.nos-photo img{width:100%;height:100%;object-fit:cover;transition:transform .7s}
+.nos-photo:hover img{transform:scale(1.05)}
+.nos-photo.tall{grid-row:1/3}
+.nos-text .section-sub{max-width:100%;margin-bottom:32px}
+.nos-stats{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:36px}
+.nos-stat{background:var(--card);border:1px solid var(--b);border-radius:3px;padding:20px}
+.nos-stat strong{font-family:'Cormorant Garamond',serif;font-size:1.9rem;color:var(--accent);display:block;font-weight:300}
+.nos-stat span{font-size:.72rem;color:var(--s2);letter-spacing:1.5px;text-transform:uppercase}
+
+/* ── PHOTO STRIP ── */
+.photo-strip{display:grid;grid-template-columns:repeat(4,1fr);height:340px;gap:0}
+.strip-img{overflow:hidden;position:relative}
+.strip-img img{width:100%;height:100%;object-fit:cover;transition:transform .8s;filter:brightness(.85)}
+.strip-img:hover img{transform:scale(1.08);filter:brightness(1)}
+.strip-img::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(9,9,10,.5),transparent 50%)}
+
+/* ── TESTIMONIOS BG ── */
+.testimonios{background:var(--s);position:relative}
+.testimonios-bg{position:absolute;inset:0;background-image:url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1400&q=80');background-size:cover;background-position:center;opacity:.06}
+
+/* ── PROCESO ── */
+.proceso{background:var(--bg)}
+.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-top:60px;position:relative;border:1px solid var(--b);border-radius:var(--r);overflow:hidden}
+.step{text-align:center;padding:36px 20px;position:relative;border-right:1px solid var(--b)}
+.step:last-child{border-right:none}
+.step-num{width:48px;height:48px;background:var(--card);border:1px solid var(--b);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--silver);margin:0 auto 20px;position:relative;z-index:2;font-weight:300}
+.step.active .step-num{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.step h4{font-size:.78rem;color:var(--w);margin-bottom:8px;font-family:'Inter',sans-serif;font-weight:600;letter-spacing:.8px;text-transform:uppercase}
+.step p{font-size:.75rem;color:var(--s2);line-height:1.7}
+
+/* ── TESTIMONIOS ── */
+.testimonios{background:var(--s)}
+.test-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1px;margin-top:56px;border:1px solid var(--b);border-radius:var(--r);overflow:hidden}
+.test-card{background:var(--card);padding:36px;position:relative}
+.test-card::before{content:'"';font-family:'Cormorant Garamond',serif;font-size:7rem;color:rgba(201,184,154,.07);position:absolute;top:-10px;right:20px;line-height:1;font-weight:300}
+.test-stars{color:var(--accent);font-size:.8rem;margin-bottom:16px;letter-spacing:3px}
+.test-card p{font-size:.85rem;color:var(--w2);line-height:1.85;margin-bottom:24px;position:relative}
+.test-author{display:flex;align-items:center;gap:12px}
+.test-avatar{width:40px;height:40px;border-radius:50%;background:rgba(201,184,154,.15);border:1px solid rgba(201,184,154,.2);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--accent);font-weight:300}
+.test-author strong{font-size:.82rem;color:var(--w);display:block}
+.test-author span{font-size:.72rem;color:var(--s2)}
+
+/* ── CONTACTO ── */
+.contacto{background:var(--bg)}
+.contact-inner{display:grid;grid-template-columns:1fr 1.2fr;gap:80px;align-items:start}
+.contact-info h2{font-size:clamp(2rem,4vw,3.2rem);margin-bottom:20px;font-weight:300}
+.contact-info p{color:var(--s2);line-height:1.85;margin-bottom:36px;font-size:.9rem}
+.contact-items{display:flex;flex-direction:column;gap:18px}
+.c-item{display:flex;align-items:center;gap:14px}
+.c-item-icon{width:40px;height:40px;background:rgba(201,184,154,.07);border:1px solid rgba(201,184,154,.13);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.c-item span{font-size:.72rem;letter-spacing:1.5px;color:var(--s2);text-transform:uppercase;display:block;margin-bottom:2px}
+.c-item strong{font-size:.88rem;color:var(--w)}
+form.lead-form{display:flex;flex-direction:column;gap:14px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:.7rem;letter-spacing:2px;color:var(--s2);text-transform:uppercase}
+.field input,.field select,.field textarea{background:var(--card);border:1px solid var(--b);border-radius:3px;padding:13px 16px;color:var(--w);font-family:'Inter',sans-serif;font-size:.88rem;outline:none;transition:border .3s;width:100%;appearance:none}
+.field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2368645f' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:rgba(201,184,154,.45);box-shadow:0 0 0 3px rgba(201,184,154,.06)}
+.field input::placeholder{color:var(--s2)}
+.enganche-field{display:none}
+.enganche-field.show{display:flex}
+.submit-btn{background:var(--accent);color:var(--bg);padding:16px;border-radius:3px;font-size:12px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;transition:all .3s;font-family:'Inter',sans-serif;margin-top:4px;cursor:pointer;border:none;width:100%}
+.submit-btn:hover{background:var(--w);transform:translateY(-1px);box-shadow:0 12px 40px rgba(201,184,154,.15)}
+.form-ok{display:none;text-align:center;padding:44px;background:rgba(201,184,154,.05);border:1px solid rgba(201,184,154,.15);border-radius:8px}
+.form-ok.show{display:block}
+.form-ok h3{font-size:1.9rem;margin-bottom:12px;color:var(--accent);font-weight:300}
+.form-ok p{color:var(--s2);font-size:.88rem;line-height:1.8}
+
+/* ── FOOTER ── */
+footer{background:var(--s);border-top:1px solid var(--b);padding:64px 5% 32px}
+.footer-inner{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+.footer-brand p{font-size:.8rem;color:var(--s2);line-height:1.85;margin-top:16px;max-width:260px}
+.footer-col h5{font-size:.68rem;letter-spacing:3px;text-transform:uppercase;color:var(--silver);margin-bottom:20px}
+.footer-col a{display:block;font-size:.8rem;color:var(--s2);margin-bottom:10px;transition:color .3s}
+.footer-col a:hover{color:var(--accent)}
+.footer-bottom{border-top:1px solid var(--b);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.footer-bottom p{font-size:.72rem;color:var(--s2)}
+
+/* ── WHATSAPP ── */
+.wa{position:fixed;bottom:28px;right:28px;z-index:800;width:54px;height:54px;background:#25d366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 32px rgba(37,211,102,.3);transition:all .3s}
+.wa:hover{transform:scale(1.1);box-shadow:0 12px 40px rgba(37,211,102,.5)}
+.wa svg{width:28px;height:28px;fill:white}
+
+/* ── MODAL ── */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:1000;align-items:center;justify-content:center;backdrop-filter:blur(10px);padding:20px}
+.modal-bg.open{display:flex}
+.modal{background:var(--card);border:1px solid var(--b);border-radius:12px;max-width:780px;width:100%;max-height:90vh;overflow-y:auto;position:relative}
+.modal-close{position:absolute;top:16px;right:16px;width:36px;height:36px;background:rgba(255,255,255,.06);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--s2);cursor:pointer;border:none;transition:all .3s;z-index:10;font-family:'Inter',sans-serif}
+.modal-close:hover{background:rgba(201,184,154,.12);color:var(--accent)}
+.modal-gallery{height:320px;overflow:hidden;position:relative;border-radius:12px 12px 0 0}
+.modal-gallery img{width:100%;height:100%;object-fit:cover}
+.modal-gallery .gallery-nav{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;padding:0 16px}
+.gal-btn{width:36px;height:36px;background:rgba(9,9,10,.7);border:1px solid rgba(255,255,255,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--w);font-size:16px;cursor:pointer;transition:all .3s;font-family:'Inter',sans-serif}
+.gal-btn:hover{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.modal-body{padding:32px}
+.modal-dev{font-size:9.5px;letter-spacing:2.5px;color:var(--s2);margin-bottom:8px;text-transform:uppercase}
+.modal-body h2{font-size:2.1rem;margin-bottom:16px;font-weight:300}
+.modal-price{font-family:'Cormorant Garamond',serif;font-size:2.2rem;color:var(--accent);margin-bottom:24px;font-weight:300}
+.modal-specs{display:flex;gap:20px;flex-wrap:wrap;padding:20px;background:var(--b2);border-radius:8px;margin-bottom:24px}
+.modal-spec{text-align:center}
+.modal-spec strong{display:block;font-size:1.05rem;color:var(--w)}
+.modal-spec span{font-size:.7rem;color:var(--s2);letter-spacing:1.5px;text-transform:uppercase}
+.modal-desc{font-size:.85rem;color:var(--w2);line-height:1.9;margin-bottom:28px}
+.modal-actions{display:flex;gap:10px;flex-wrap:wrap}
+.modal-btn{padding:13px 24px;border-radius:3px;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;transition:all .3s;font-family:'Inter',sans-serif;cursor:pointer}
+.modal-btn.gold{background:var(--accent);color:var(--bg);border:none}
+.modal-btn.gold:hover{background:var(--w)}
+.modal-btn.out{background:transparent;border:1px solid var(--b);color:var(--s2)}
+.modal-btn.out:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ── ADMIN ── */
+#admin-panel{display:none;position:fixed;inset:0;background:rgba(5,5,6,.97);z-index:2000;overflow-y:auto;padding:40px 5%}
+#admin-panel.open{display:block}
+.admin-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:40px}
+.admin-header h2{font-size:1.8rem;color:var(--accent);font-weight:300}
+.admin-close{width:40px;height:40px;background:var(--b);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--w);cursor:pointer;border:none;font-family:'Inter',sans-serif;transition:all .3s}
+.admin-close:hover{background:var(--accent);color:var(--bg)}
+.admin-tabs{display:flex;gap:0;margin-bottom:32px;border-bottom:1px solid var(--b)}
+.admin-tab{padding:12px 28px;font-size:.75rem;letter-spacing:2px;text-transform:uppercase;color:var(--s2);cursor:pointer;border-bottom:1px solid transparent;margin-bottom:-1px;transition:all .3s;font-family:'Inter',sans-serif;background:none;border-top:none;border-left:none;border-right:none}
+.admin-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.admin-section{display:none}
+.admin-section.active{display:block}
+.admin-form{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:920px}
+.admin-form .field-full{grid-column:1/-1}
+.admin-form .field label{color:var(--silver)}
+.admin-form .field input,.admin-form .field select,.admin-form .field textarea{background:var(--s);border-color:var(--b2)}
+.admin-form .field textarea{resize:vertical;min-height:100px}
+.photo-upload{border:1px dashed var(--b);border-radius:8px;padding:32px;text-align:center;cursor:pointer;transition:all .3s;position:relative;grid-column:1/-1}
+.photo-upload:hover{border-color:var(--accent);background:rgba(201,184,154,.02)}
+.photo-upload input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.photo-upload p{color:var(--s2);font-size:.85rem}
+.photo-upload strong{color:var(--accent)}
+.photo-previews{display:flex;gap:12px;flex-wrap:wrap;margin-top:4px;grid-column:1/-1}
+.photo-thumb{width:90px;height:70px;object-fit:cover;border-radius:6px;border:1px solid var(--b)}
+.admin-submit{background:var(--accent);color:var(--bg);padding:14px 36px;border-radius:3px;font-size:.75rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;grid-column:1/-1;max-width:260px;font-family:'Inter',sans-serif;cursor:pointer;border:none;transition:all .3s}
+.admin-submit:hover{background:var(--w)}
+.copy-gen{background:var(--card);border:1px solid var(--b);border-radius:10px;padding:28px;grid-column:1/-1}
+.copy-gen h4{font-size:.72rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+.copy-output{background:var(--s);border:1px solid var(--b2);border-radius:6px;padding:16px;font-size:.82rem;color:var(--w2);line-height:1.85;min-height:80px;margin-bottom:12px;white-space:pre-wrap}
+.copy-btn{background:rgba(201,184,154,.1);border:1px solid rgba(201,184,154,.2);color:var(--accent);padding:8px 20px;border-radius:3px;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:'Inter',sans-serif;transition:all .3s}
+.copy-btn:hover{background:var(--accent);color:var(--bg)}
+.prop-list{display:flex;flex-direction:column;gap:10px}
+.prop-list-item{background:var(--card);border:1px solid var(--b);border-radius:8px;padding:14px 18px;display:flex;align-items:center;gap:14px}
+.prop-list-item img{width:60px;height:48px;object-fit:cover;border-radius:4px;flex-shrink:0}
+.prop-list-info{flex:1}
+.prop-list-info strong{font-size:.88rem;color:var(--w);display:block}
+.prop-list-info span{font-size:.73rem;color:var(--s2)}
+.del-btn{background:rgba(200,60,60,.08);border:1px solid rgba(200,60,60,.15);color:#c06060;padding:7px 14px;border-radius:3px;font-size:.7rem;letter-spacing:1px;text-transform:uppercase;cursor:pointer;font-family:'Inter',sans-serif;transition:all .3s}
+.del-btn:hover{background:rgba(200,60,60,.2)}
+
+/* ── ANIMACIONES ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.r{opacity:0;transform:translateY(28px);transition:opacity .75s var(--fs),transform .75s var(--fs)}
+.r.in{opacity:1;transform:none}
+.r.d1{transition-delay:.1s}.r.d2{transition-delay:.2s}.r.d3{transition-delay:.3s}.r.d4{transition-delay:.4s}
+
+/* ── PRINT ── */
+@media print{
+  body>*:not(#print-sheet){display:none!important}
+  #print-sheet{display:block!important;position:static;background:#fff;color:#111;padding:48px;font-family:'Inter',sans-serif}
+  .print-logo-wrap{margin-bottom:28px}
+  .print-kaivo{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;letter-spacing:8px;color:#111;text-transform:uppercase}
+  .print-re{font-size:9px;letter-spacing:5px;color:#888;text-transform:uppercase}
+  .print-title{font-size:2rem;font-family:'Cormorant Garamond',serif;margin:20px 0 6px;font-weight:300}
+  .print-price{font-size:1.5rem;color:#9a7830;margin-bottom:20px;font-family:'Cormorant Garamond',serif;font-weight:300}
+  .print-photos{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+  .print-photos img{width:100%;height:180px;object-fit:cover;border-radius:6px}
+  .print-specs{display:flex;gap:24px;padding:14px 20px;background:#f7f6f4;border-radius:6px;margin-bottom:20px;flex-wrap:wrap}
+  .print-spec strong{display:block;font-size:1rem;color:#111}
+  .print-spec span{font-size:.68rem;color:#888;letter-spacing:1.5px;text-transform:uppercase}
+  .print-desc{font-size:.85rem;line-height:1.85;color:#444}
+  .print-footer{margin-top:32px;padding-top:16px;border-top:1px solid #e8e8e8;font-size:.7rem;color:#aaa;letter-spacing:1px}
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1024px){
+  .valor{grid-template-columns:1fr}.valor-right{min-height:320px}
+  .steps{grid-template-columns:1fr 1fr 1fr}
+  .step:nth-child(3){border-right:none}.step:nth-child(4){border-right:1px solid var(--b)}
+}
+@media(max-width:900px){
+  .nos-inner{grid-template-columns:1fr}.nos-photos{height:300px}
+  .contact-inner{grid-template-columns:1fr}
+  .footer-inner{grid-template-columns:1fr 1fr}
+  .form-row{grid-template-columns:1fr}
+  .admin-form{grid-template-columns:1fr}
+  .admin-form .field-full,.photo-upload,.photo-previews,.copy-gen,.admin-submit{grid-column:1}
+}
+@media(max-width:640px){
+  .nav-links{display:none}.hamburger{display:flex}
+  .hero-stats{gap:24px}
+  .footer-inner{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr 1fr;border-radius:var(--r)}
+  .step{border-right:1px solid var(--b);border-bottom:1px solid var(--b)}
+  .proj-grid{gap:0}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo" id="logo-btn" title="KAIVO Real Estate">
+    <div class="logo-kaivo">KAIVO</div>
+    <div class="logo-re">Real Estate</div>
+  </div>
+  <div class="nav-links">
+    <a href="#nosotros">Nosotros</a>
+    <a href="#servicios">Servicios</a>
+    <a href="#preventa">Preventa</a>
+    <a href="#residencial">Propiedades</a>
+    <button class="nav-cta" onclick="goTo('contacto')">Invertir Ahora</button>
+  </div>
+  <div class="hamburger" id="hamburger" onclick="toggleMob()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+<div class="mob-menu" id="mob-menu">
+  <a href="#nosotros" onclick="toggleMob()">Nosotros</a>
+  <a href="#servicios" onclick="toggleMob()">Servicios</a>
+  <a href="#preventa" onclick="toggleMob()">Preventa</a>
+  <a href="#residencial" onclick="toggleMob()">Propiedades</a>
+  <a href="#contacto" onclick="toggleMob()">Contacto</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="inicio">
+  <div class="hero-bg" id="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span></span>
+      <p>Especialistas en preventa · Aguascalientes, México</p>
+    </div>
+    <h1>Tu dinero merece<br/><em>trabajar más inteligente.</em></h1>
+    <p class="sub">Ayudamos a inversores y familias a encontrar la propiedad correcta, al precio correcto, sin riesgos, sin estafas y sin perder tiempo ni dinero en el proceso.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="goTo('preventa')">Ver Proyectos en Preventa ↓</button>
+      <button class="btn-ghost" onclick="goTo('contacto')">Hablar con un asesor</button>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat"><strong>+50</strong><span>Inversores activos</span></div>
+    <div class="hero-stat"><strong>8+</strong><span>Años de experiencia</span></div>
+    <div class="hero-stat"><strong>4</strong><span>Proyectos exclusivos</span></div>
+    <div class="hero-stat"><strong>$0</strong><span>Costo para el comprador</span></div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span>Inversiones Seguras</span><span>Preventas Exclusivas</span><span>Sin Estafas</span>
+    <span>Aguascalientes</span><span>Asesoría Gratuita</span><span>Rendimiento Real</span>
+    <span>Propiedades Premium</span><span>Tu Patrimonio Protegido</span>
+    <span>Inversiones Seguras</span><span>Preventas Exclusivas</span><span>Sin Estafas</span>
+    <span>Aguascalientes</span><span>Asesoría Gratuita</span><span>Rendimiento Real</span>
+    <span>Propiedades Premium</span><span>Tu Patrimonio Protegido</span>
+  </div>
+</div>
+
+<!-- PROPUESTA DE VALOR -->
+<div class="valor" id="nosotros">
+  <div class="valor-left">
+    <span class="section-tag r">Por qué KAIVO</span>
+    <h2 class="section-title r d1">El mercado inmobiliario<br/>tiene trampas.<br/><em style="color:var(--accent);font-style:italic">Nosotros las conocemos todas.</em></h2>
+    <div class="divider r d2"></div>
+    <p class="section-sub r d2">Somos una agencia boutique especializada en preventas y propiedades residenciales premium en Aguascalientes. No somos un portal de anuncios — somos tu socio estratégico.</p>
+    <div class="pillars">
+      <div class="pillar r d2">
+        <div class="pillar-icon">🛡️</div>
+        <div><h4>Cero riesgo de estafa</h4><p>Verificamos legalmente cada proyecto antes de presentártelo. Solo trabajamos con desarrolladores con historial comprobable.</p></div>
+      </div>
+      <div class="pillar r d3">
+        <div class="pillar-icon">💸</div>
+        <div><h4>Ahorra desde el día uno</h4><p>Accedes a precios de preventa que el público general no ve. La diferencia entre comprar ahora y en dos años puede ser de cientos de miles de pesos.</p></div>
+      </div>
+      <div class="pillar r d4">
+        <div class="pillar-icon">🎯</div>
+        <div><h4>Sin conflicto de interés</h4><p>No cobramos al comprador. Nuestra comisión viene del desarrollador, así que nuestro interés está 100% alineado con el tuyo.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="valor-right r">
+    <img src="luxurious billionaire modern House.jpeg" alt="Propiedad residencial premium" loading="lazy"/>
+  </div>
+</div>
+
+<!-- SERVICIOS -->
+<section class="servicios" id="servicios">
+  <div style="max-width:600px;margin-bottom:56px">
+    <span class="section-tag r">Lo que hacemos</span>
+    <h2 class="section-title r d1">Un servicio único.<br/>Resultados medibles.</h2>
+  </div>
+  <div class="serv-grid">
+    <div class="serv-card r">
+      <div class="serv-icon">🏗️</div>
+      <h3>Preventas Exclusivas</h3>
+      <p>Acceso anticipado a los mejores proyectos en Aguascalientes antes de que salgan al mercado. Precios de lanzamiento y plusvalía desde el primer día.</p>
+    </div>
+    <div class="serv-card r d1">
+      <div class="serv-icon">🏡</div>
+      <h3>Propiedades Residenciales</h3>
+      <p>Selección curada de casas y departamentos de lujo en los mejores fraccionamientos. Cada propiedad verificada, sin sorpresas jurídicas ni técnicas.</p>
+    </div>
+    <div class="serv-card r d2">
+      <div class="serv-icon">📈</div>
+      <h3>Estrategia de Inversión</h3>
+      <p>Te ayudamos a estructurar tu inversión: desde el enganche hasta la estrategia de salida. Renta, Airbnb o plusvalía pura — diseñamos el plan correcto.</p>
+    </div>
+    <div class="serv-card r d3">
+      <div class="serv-icon">⚖️</div>
+      <h3>Verificación Legal</h3>
+      <p>Revisión completa de escrituras, permisos y situación fiscal del inmueble. Tu seguridad jurídica es innegociable para nosotros.</p>
+    </div>
+    <div class="serv-card r d4">
+      <div class="serv-icon">🤝</div>
+      <h3>Acompañamiento Total</h3>
+      <p>Desde la primera llamada hasta la firma de escrituras. Estamos contigo en cada paso, negociando condiciones y resolviendo imprevistos.</p>
+    </div>
+    <div class="serv-card r d1">
+      <div class="serv-icon">🔑</div>
+      <h3>Renta y Airbnb</h3>
+      <p>¿Quieres que tu propiedad genere ingresos? Te conectamos con administradores de renta y optimizamos tu propiedad para plataformas de renta vacacional.</p>
+    </div>
+    <div class="serv-card r d2" style="border-color:rgba(201,184,154,.2);background:linear-gradient(135deg,var(--card),rgba(201,184,154,.04))">
+      <div class="serv-icon">🏗️</div>
+      <h3>Terreno + Construcción a la Medida</h3>
+      <p>¿Ya tienes un terreno o quieres comprar uno? Con nuestra constructora aliada diseñamos y edificamos tu casa exactamente como la imaginas — sin sobrecostos, sin retrasos, con garantía total.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PREVENTA -->
+<section class="preventa" id="preventa">
+  <div class="preventa-header">
+    <div>
+      <span class="section-tag r">Proyectos en Preventa</span>
+      <h2 class="section-title r d1">Invierte antes que todos.<br/><em style="color:var(--accent);font-style:italic">Gana la diferencia.</em></h2>
+    </div>
+    <p class="r" style="color:var(--s2);max-width:300px;font-size:.82rem;line-height:1.85">Proyectos seleccionados por su solidez, ubicación y potencial de retorno. Todos verificados.</p>
+  </div>
+  <div class="proj-grid">
+    <div class="proj-card r" onclick="openProj('beara')">
+      <div class="proj-img">
+        <img src="https://beara.mx/wp-content/uploads/2026/01/vida_maravillosa1.webp" alt="Beara Paraíso Vertical" loading="lazy"/>
+        <div class="proj-badge">Entrega 2026</div>
+      </div>
+      <div class="proj-body">
+        <p class="proj-dev">Terral · 30+ años de experiencia</p>
+        <h3>Beara Paraíso Vertical</h3>
+        <p class="proj-desc">Tres torres residenciales con amenidades de resort en el corazón de Aguascalientes. Departamentos de 64 a 139 m² con acabados europeos.</p>
+        <div class="proj-specs">
+          <span class="proj-spec">🏢 3 Torres</span>
+          <span class="proj-spec">📐 64–139 m²</span>
+          <span class="proj-spec">🌊 Alberca · Gym</span>
+        </div>
+        <p class="proj-price">Desde $2.8 MDP</p>
+        <button class="proj-cta">Ver proyecto completo →</button>
+      </div>
+    </div>
+    <div class="proj-card r d1" onclick="openProj('aunna')">
+      <div class="proj-img">
+        <img src="https://www.aunna-ags.com/wp-content/themes/aunna/assets/img/inicio/banner.webp" alt="AUNNA" loading="lazy"/>
+        <div class="proj-badge">Preventa Activa</div>
+      </div>
+      <div class="proj-body">
+        <p class="proj-dev">Grupo Paar · Desarrollo Mixto</p>
+        <h3>AUNNA</h3>
+        <p class="proj-desc">70 departamentos y 41 locales comerciales. Ideal para renta de largo plazo o negocio propio con dos flujos de ingreso.</p>
+        <div class="proj-specs">
+          <span class="proj-spec">🏠 70 Deptos</span>
+          <span class="proj-spec">🏪 41 Locales</span>
+          <span class="proj-spec">📐 60–128 m²</span>
+        </div>
+        <p class="proj-price">Consultar precio</p>
+        <button class="proj-cta">Ver proyecto completo →</button>
+      </div>
+    </div>
+    <div class="proj-card r d2" onclick="openProj('diana')">
+      <div class="proj-img">
+        <img src="https://dianatower.mx/wp-content/uploads/2025/10/DNT_RND_Area-comun-2-1024x1024.png" alt="Diana Tower" loading="lazy"/>
+        <div class="proj-badge">Centro Histórico</div>
+      </div>
+      <div class="proj-body">
+        <p class="proj-dev">Grupo ABA · Proyecto Boutique</p>
+        <h3>Diana Tower</h3>
+        <p class="proj-desc">43 departamentos en 5 pisos en el Centro Histórico. Perfecto para Airbnb con retorno acelerado y diseño sin competencia.</p>
+        <div class="proj-specs">
+          <span class="proj-spec">🏙️ 43 Deptos</span>
+          <span class="proj-spec">📍 Centro Histórico</span>
+          <span class="proj-spec">🌐 Airbnb-Ready</span>
+        </div>
+        <p class="proj-price">Consultar precio</p>
+        <button class="proj-cta">Ver proyecto completo →</button>
+      </div>
+    </div>
+    <div class="proj-card r d3" onclick="openProj('belanta')">
+      <div class="proj-img">
+        <img src="https://beara.mx/wp-content/uploads/2025/06/galeria2.webp" alt="Belanta Campestre" loading="lazy"/>
+        <div class="proj-badge">Entrega Q4 2026</div>
+      </div>
+      <div class="proj-body">
+        <p class="proj-dev">GARCAM · 17 años en el mercado</p>
+        <h3>Belanta Campestre</h3>
+        <p class="proj-desc">200 lotes residenciales en fraccionamiento campestre exclusivo. Superficies de 180 a 395 m² con escrituras limpias y financiamiento accesible.</p>
+        <div class="proj-specs">
+          <span class="proj-spec">🌿 200 Lotes</span>
+          <span class="proj-spec">📐 180–395 m²</span>
+          <span class="proj-spec">🏆 Exclusivo</span>
+        </div>
+        <p class="proj-price">Desde $1,831,790</p>
+        <button class="proj-cta">Ver proyecto completo →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESIDENCIAL -->
+<section class="residencial" id="residencial">
+  <div class="res-header">
+    <div>
+      <span class="section-tag r">Propiedades Residenciales</span>
+      <h2 class="section-title r d1">Casas y departamentos<br/><em style="color:var(--accent);font-style:italic">top en Aguascalientes.</em></h2>
+    </div>
+  </div>
+  <div class="prop-grid" id="prop-grid">
+    <div class="empty-state">
+      <p>Próximamente propiedades disponibles.</p>
+      <small>¿Tienes una propiedad que quieras listar? <a href="#contacto" style="color:var(--accent)">Contáctanos.</a></small>
+    </div>
+  </div>
+</section>
+
+<!-- QUIÉNES SOMOS -->
+<section class="nosotros" id="quienes">
+  <div class="nos-inner">
+    <div class="nos-photos r">
+      <div class="nos-photo tall">
+        <img src="_ (3).jpeg" alt="Casa residencial premium" loading="lazy"/>
+      </div>
+      <div class="nos-photo">
+        <img src="_.jpeg" alt="Propiedad de lujo" loading="lazy"/>
+      </div>
+      <div class="nos-photo">
+        <img src="_ (2).jpeg" alt="Residencia exclusiva" loading="lazy"/>
+      </div>
+    </div>
+    <div class="nos-text">
+      <span class="section-tag r">Quiénes somos</span>
+      <h2 class="section-title r d1">No vendemos propiedades.<br/><em style="color:var(--accent);font-style:italic">Construimos patrimonio.</em></h2>
+      <div class="divider r d1"></div>
+      <p class="section-sub r d2" style="max-width:100%;margin-bottom:16px">KAIVO Real Estate nació con una misión clara: democratizar el acceso a las mejores inversiones inmobiliarias en Aguascalientes y México. Durante años hemos visto cómo familias e inversores pierden dinero por falta de información, asesoría deficiente o estafas disfrazadas de "grandes oportunidades".</p>
+      <p class="section-sub r d2" style="max-width:100%;margin-bottom:32px">Hoy somos el escudo entre tu capital y esos riesgos. Cada proyecto que presentamos ha pasado por nuestra revisión legal, financiera y de mercado. Si no lo compraríamos nosotros, no te lo recomendamos a ti.</p>
+      <div class="nos-stats r d3">
+        <div class="nos-stat"><strong>+50</strong><span>Inversores satisfechos</span></div>
+        <div class="nos-stat"><strong>100%</strong><span>Legal y verificado</span></div>
+        <div class="nos-stat"><strong>$0</strong><span>Costo al comprador</span></div>
+        <div class="nos-stat"><strong>#1</strong><span>Preventa en AGS</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PHOTO STRIP -->
+<div class="photo-strip">
+  <div class="strip-img">
+    <img src="_.jpeg" alt="Casa moderna" loading="lazy"/>
+  </div>
+  <div class="strip-img">
+    <img src="_ (2).jpeg" alt="Residencia de lujo" loading="lazy"/>
+  </div>
+  <div class="strip-img">
+    <img src="_ (3).jpeg" alt="Propiedad premium" loading="lazy"/>
+  </div>
+  <div class="strip-img">
+    <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=900&q=90" alt="Torre residencial" loading="lazy"/>
+  </div>
+</div>
+
+<!-- PROCESO -->
+<section class="proceso">
+  <div style="text-align:center;max-width:560px;margin:0 auto 60px">
+    <span class="section-tag r">Cómo trabajamos</span>
+    <h2 class="section-title r d1">Tu inversión, paso a paso.</h2>
+  </div>
+  <div class="steps">
+    <div class="step r active">
+      <div class="step-num">1</div>
+      <h4>Primera llamada</h4>
+      <p>Entendemos tu situación financiera, objetivos y plazos. Sin presión.</p>
+    </div>
+    <div class="step r d1">
+      <div class="step-num">2</div>
+      <h4>Propuesta</h4>
+      <p>Filtramos el mercado y presentamos solo opciones que encajan con tu perfil.</p>
+    </div>
+    <div class="step r d2">
+      <div class="step-num">3</div>
+      <h4>Recorrido</h4>
+      <p>Visitamos el proyecto y analizamos los números reales de la inversión.</p>
+    </div>
+    <div class="step r d3">
+      <div class="step-num">4</div>
+      <h4>Revisión legal</h4>
+      <p>Verificamos escrituras, permisos y situación jurídica antes de cualquier compromiso.</p>
+    </div>
+    <div class="step r d4">
+      <div class="step-num">5</div>
+      <h4>Escrituración</h4>
+      <p>Te acompañamos hasta la firma final. Tu propiedad, tu patrimonio.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIOS -->
+<section class="testimonios" style="position:relative">
+  <span class="section-tag r">Lo que dicen nuestros clientes</span>
+  <h2 class="section-title r d1">Historias reales,<br/><em style="color:var(--accent);font-style:italic">resultados reales.</em></h2>
+  <div class="test-grid">
+    <div class="test-card r">
+      <div class="test-stars">★★★★★</div>
+      <p>Llegué sin saber nada de inversión inmobiliaria y con miedo a que me estafaran. KAIVO me explicó todo sin presionarme y encontré un departamento en preventa que ya vale 30% más.</p>
+      <div class="test-author"><div class="test-avatar">MG</div><div><strong>Miguel G.</strong><span>Beara Paraíso Vertical</span></div></div>
+    </div>
+    <div class="test-card r d1">
+      <div class="test-stars">★★★★★</div>
+      <p>Todo el proceso fue transparente, con información real y sin sorpresas. En tres meses ya tenía mi lote escriturado. Nunca había comprado una propiedad tan sin estrés.</p>
+      <div class="test-author"><div class="test-avatar">LS</div><div><strong>Laura S.</strong><span>Belanta Campestre</span></div></div>
+    </div>
+    <div class="test-card r d2">
+      <div class="test-stars">★★★★★</div>
+      <p>Llevaba 2 años buscando propiedad por mi cuenta y algo siempre fallaba. Con KAIVO encontré exactamente lo que buscaba en dos semanas. Ojalá los hubiera conocido antes.</p>
+      <div class="test-author"><div class="test-avatar">CR</div><div><strong>Carlos R.</strong><span>Diana Tower</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section class="contacto" id="contacto">
+  <div class="contact-inner">
+    <div class="contact-info r">
+      <span class="section-tag">Hablemos</span>
+      <h2 class="section-title">¿Listo para invertir<br/><em style="color:var(--accent);font-style:italic">con inteligencia?</em></h2>
+      <div class="divider"></div>
+      <p>Cuéntanos qué buscas y en menos de 24 horas te enviamos opciones personalizadas. Sin compromiso, sin presión.</p>
+      <div class="contact-items">
+        <div class="c-item"><div class="c-item-icon">📍</div><div><span>Ubicación</span><strong>Aguascalientes, México</strong></div></div>
+        <div class="c-item"><div class="c-item-icon">📱</div><div><span>WhatsApp</span><strong>+52 449 457 7041</strong></div></div>
+        <div class="c-item"><div class="c-item-icon">✉️</div><div><span>Email</span><strong>kaivomx@gmail.com</strong></div></div>
+      </div>
+    </div>
+    <div class="r d1">
+      <form class="lead-form" id="lf" onsubmit="sf(event)">
+        <div class="form-row">
+          <div class="field"><label>Nombre completo</label><input type="text" id="fi-nombre" placeholder="Tu nombre" required/></div>
+          <div class="field"><label>Teléfono / WhatsApp</label><input type="tel" id="fi-tel" placeholder="+52 449..." required/></div>
+        </div>
+        <div class="field"><label>Correo electrónico</label><input type="email" id="fi-email" placeholder="tu@email.com" required/></div>
+        <div class="field">
+          <label>¿Qué te interesa?</label>
+          <select id="fi-proj" onchange="onProyecto()">
+            <option value="">— Seleccionar —</option>
+            <optgroup label="Inversión en Preventa">
+              <option value="inversion">Beara Paraíso Vertical</option>
+              <option value="inversion">AUNNA</option>
+              <option value="inversion">Diana Tower</option>
+              <option value="inversion">Belanta Campestre</option>
+            </optgroup>
+            <optgroup label="Propiedad Residencial">
+              <option value="casa">Casa o Departamento</option>
+              <option value="terreno">Terreno Residencial</option>
+            </optgroup>
+            <option value="">Necesito asesoría, aún no sé</option>
+          </select>
+        </div>
+        <!-- Presupuesto inversión -->
+        <div class="field budget-field" id="budget-inversion" style="display:none">
+          <label>Presupuesto de inversión</label>
+          <select id="fi-budget-inv">
+            <option value="">— Seleccionar —</option>
+            <option>Menos de $2.8 MDP</option>
+            <option>Desde $2.8 MDP</option>
+            <option>Desde $3 MDP</option>
+            <option>Desde $4 MDP</option>
+            <option>Desde $5 MDP</option>
+            <option>Más de $5 MDP</option>
+          </select>
+        </div>
+        <!-- Presupuesto casa/depa -->
+        <div class="field budget-field" id="budget-casa" style="display:none">
+          <label>Presupuesto para tu propiedad</label>
+          <select id="fi-budget-casa">
+            <option value="">— Seleccionar —</option>
+            <option>Menos de $3 MDP</option>
+            <option>Desde $3 MDP</option>
+            <option>Desde $4 MDP</option>
+            <option>Desde $5 MDP</option>
+            <option>Más de $5 MDP</option>
+          </select>
+        </div>
+        <!-- Presupuesto terreno -->
+        <div class="field budget-field" id="budget-terreno" style="display:none">
+          <label>Presupuesto para el terreno</label>
+          <select id="fi-budget-ter">
+            <option value="">— Seleccionar —</option>
+            <option>Menos de $1.5 MDP</option>
+            <option>Desde $1.5 MDP</option>
+            <option>Desde $2 MDP</option>
+            <option>Desde $3 MDP</option>
+            <option>Más de $3 MDP</option>
+          </select>
+        </div>
+        <!-- Extra terreno -->
+        <div class="field budget-field" id="extra-terreno" style="display:none">
+          <label>¿Qué planeas hacer en el terreno?</label>
+          <select id="fi-terreno-uso">
+            <option value="">— Seleccionar —</option>
+            <option>Construir mi casa con KAIVO</option>
+            <option>Construir para vender o rentar</option>
+            <option>Inversión / plusvalía a largo plazo</option>
+            <option>Aún no lo decido</option>
+          </select>
+        </div>
+        <button type="submit" class="submit-btn">Quiero mi asesoría gratuita →</button>
+      </form>
+      <div class="form-ok" id="fok">
+        <h3>¡Excelente decisión!</h3>
+        <p>Recibimos tu información. Un especialista KAIVO te contactará en menos de 24 horas con opciones personalizadas para ti.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="logo" style="cursor:default">
+        <div class="logo-kaivo">KAIVO</div>
+        <div class="logo-re">Real Estate</div>
+      </div>
+      <p>Especialistas en inversiones inmobiliarias y preventas en Aguascalientes. Tu patrimonio, nuestra prioridad.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Proyectos</h5>
+      <a href="#preventa" onclick="goTo('preventa')">Beara Paraíso Vertical</a>
+      <a href="#preventa" onclick="goTo('preventa')">AUNNA</a>
+      <a href="#preventa" onclick="goTo('preventa')">Diana Tower</a>
+      <a href="#preventa" onclick="goTo('preventa')">Belanta Campestre</a>
+    </div>
+    <div class="footer-col">
+      <h5>Empresa</h5>
+      <a href="#nosotros" onclick="goTo('nosotros')">Quiénes somos</a>
+      <a href="#servicios" onclick="goTo('servicios')">Servicios</a>
+      <a href="#contacto" onclick="goTo('contacto')">Contacto</a>
+    </div>
+    <div class="footer-col">
+      <h5>Contacto</h5>
+      <a href="https://wa.me/524494577041" target="_blank">WhatsApp</a>
+      <a href="mailto:kaivomx@gmail.com">kaivomx@gmail.com</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 KAIVO Real Estate · Aguascalientes, México</p>
+    <p>Precios y disponibilidad sujetos a cambio sin previo aviso.</p>
+  </div>
+</footer>
+
+<!-- WHATSAPP FLOTANTE -->
+<a href="https://wa.me/524494577041?text=Hola%2C%20me%20interesa%20una%20asesor%C3%ADa%20con%20KAIVO%20Real%20Estate" class="wa" target="_blank" title="WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<!-- MODALES PREVENTA -->
+<div class="modal-bg" id="modal-beara" onclick="bgClose(event,'modal-beara')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-beara')">✕</button>
+    <div class="modal-gallery"><img src="https://beara.mx/wp-content/uploads/2026/01/vida_maravillosa1.webp" alt="Beara"/></div>
+    <div class="modal-body">
+      <p class="modal-dev">Terral · Desarrollador con 30+ años</p>
+      <h2>Beara Paraíso Vertical</h2>
+      <p class="modal-price">Desde $2,800,000 MXN</p>
+      <div class="modal-specs">
+        <div class="modal-spec"><strong>3</strong><span>Torres</span></div>
+        <div class="modal-spec"><strong>64–139 m²</strong><span>Superficie</span></div>
+        <div class="modal-spec"><strong>2026</strong><span>Entrega</span></div>
+        <div class="modal-spec"><strong>AGS</strong><span>Ubicación</span></div>
+      </div>
+      <p class="modal-desc">Beara Paraíso Vertical es la propuesta más ambiciosa de Terral en Aguascalientes: tres torres residenciales que redefinen el estándar de vida vertical en la ciudad. Los departamentos van de 64 a 139 m² con acabados de primera importación, ventanería de piso a techo y vistas panorámicas privilegiadas. Amenidades incluyen alberca tipo resort, gimnasio equipado, co-working, salón de eventos y seguridad 24/7. Comprar hoy en preventa significa acceder al precio más bajo del proyecto — cada mes que pasa, el precio sube.</p>
+      <div class="modal-actions">
+        <button class="modal-btn gold" onclick="closeModal('modal-beara');goTo('contacto')">Quiero información →</button>
+        <a href="https://beara.mx" target="_blank" class="modal-btn out">Sitio oficial</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-aunna" onclick="bgClose(event,'modal-aunna')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-aunna')">✕</button>
+    <div class="modal-gallery"><img src="https://www.aunna-ags.com/wp-content/themes/aunna/assets/img/inicio/banner.webp" alt="AUNNA"/></div>
+    <div class="modal-body">
+      <p class="modal-dev">Grupo Paar · Desarrollo Mixto</p>
+      <h2>AUNNA</h2>
+      <p class="modal-price">Precio a consultar</p>
+      <div class="modal-specs">
+        <div class="modal-spec"><strong>70</strong><span>Departamentos</span></div>
+        <div class="modal-spec"><strong>41</strong><span>Locales</span></div>
+        <div class="modal-spec"><strong>60–128 m²</strong><span>Superficie</span></div>
+      </div>
+      <p class="modal-desc">AUNNA es el desarrollo mixto más completo de Aguascalientes: 70 departamentos residenciales combinados con 41 locales comerciales en planta baja. Los departamentos oscilan entre 60 y 128 m² con amenidades de primer nivel. Los locales comerciales representan una oportunidad única — inquilinos residenciales en pisos superiores y comerciales en planta baja. Una inversión, dos flujos de ingreso.</p>
+      <div class="modal-actions">
+        <button class="modal-btn gold" onclick="closeModal('modal-aunna');goTo('contacto')">Quiero información →</button>
+        <a href="https://www.aunna-ags.com" target="_blank" class="modal-btn out">Sitio oficial</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-diana" onclick="bgClose(event,'modal-diana')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-diana')">✕</button>
+    <div class="modal-gallery"><img src="https://dianatower.mx/wp-content/uploads/2025/10/DNT_RND_Area-comun-2-1024x1024.png" alt="Diana Tower"/></div>
+    <div class="modal-body">
+      <p class="modal-dev">Grupo ABA · Proyecto Boutique</p>
+      <h2>Diana Tower</h2>
+      <p class="modal-price">Precio a consultar</p>
+      <div class="modal-specs">
+        <div class="modal-spec"><strong>43</strong><span>Departamentos</span></div>
+        <div class="modal-spec"><strong>5</strong><span>Pisos</span></div>
+        <div class="modal-spec"><strong>Centro</strong><span>Histórico</span></div>
+      </div>
+      <p class="modal-desc">Diana Tower es la joya boutique del Centro Histórico de Aguascalientes. 43 departamentos en 5 pisos en una de las zonas más cotizadas y turísticas de la ciudad. Su ubicación estratégica lo convierte en candidato perfecto para Airbnb — donde las tarifas por noche pueden triplicar una renta mensual tradicional. Diseño contemporáneo que integra el carácter histórico de la zona, sin competencia directa en el mercado.</p>
+      <div class="modal-actions">
+        <button class="modal-btn gold" onclick="closeModal('modal-diana');goTo('contacto')">Quiero información →</button>
+        <a href="https://dianatower.mx" target="_blank" class="modal-btn out">Sitio oficial</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-belanta" onclick="bgClose(event,'modal-belanta')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-belanta')">✕</button>
+    <div class="modal-gallery"><img src="https://beara.mx/wp-content/uploads/2025/06/galeria2.webp" alt="Belanta"/></div>
+    <div class="modal-body">
+      <p class="modal-dev">GARCAM · 17 años construyendo historias</p>
+      <h2>Belanta Campestre</h2>
+      <p class="modal-price">Desde $1,831,790 MXN</p>
+      <div class="modal-specs">
+        <div class="modal-spec"><strong>200</strong><span>Lotes</span></div>
+        <div class="modal-spec"><strong>180–395 m²</strong><span>Superficie</span></div>
+        <div class="modal-spec"><strong>Q4 2026</strong><span>Entrega</span></div>
+        <div class="modal-spec"><strong>Hasta $4.02M</strong><span>Precio máx.</span></div>
+      </div>
+      <p class="modal-desc">Belanta Campestre ofrece algo cada vez más escaso: tierra propia en entorno natural controlado. 200 lotes residenciales en fraccionamiento campestre exclusivo con escrituras limpias y servicios completos. GARCAM lleva 17 años desarrollando en Aguascalientes con entrega puntual y calidad certificada. Con entrega en Q4 2026, el tiempo de espera es corto y el retorno casi inmediato.</p>
+      <div class="modal-actions">
+        <button class="modal-btn gold" onclick="closeModal('modal-belanta');goTo('contacto')">Quiero información →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="admin-panel">
+  <div class="admin-header">
+    <div>
+      <div class="logo-kaivo" style="color:var(--accent)">KAIVO</div>
+      <div class="logo-re" style="margin-top:2px">Panel de administración</div>
+    </div>
+    <button class="admin-close" onclick="closeAdmin()">✕</button>
+  </div>
+  <div class="admin-tabs">
+    <button class="admin-tab active" onclick="adminTab(event,'upload')">Subir Propiedad</button>
+    <button class="admin-tab" onclick="adminTab(event,'list')">Propiedades Activas</button>
+  </div>
+  <div class="admin-section active" id="tab-upload">
+    <div class="admin-form">
+      <div class="field"><label>Nombre de la propiedad *</label><input type="text" id="a-name" placeholder="Casa en Campestre, Depto en Centro..."/></div>
+      <div class="field"><label>Tipo de propiedad</label>
+        <select id="a-type">
+          <option value="casa">Casa</option>
+          <option value="depto">Departamento</option>
+          <option value="terreno">Terreno Residencial</option>
+          <option value="lote">Lote</option>
+          <option value="oficina">Oficina / Local</option>
+        </select>
+      </div>
+      <div class="field"><label>Colonia / Fraccionamiento</label><input type="text" id="a-loc" placeholder="Campestre, Centro, Jardines..."/></div>
+      <div class="field"><label>Precio</label><input type="text" id="a-price" placeholder="$3,500,000"/></div>
+      <div class="field"><label>Superficie (m²)</label><input type="text" id="a-m2" placeholder="150"/></div>
+      <div class="field"><label>Recámaras</label><input type="number" id="a-beds" placeholder="3" min="0"/></div>
+      <div class="field"><label>Baños</label><input type="text" id="a-baths" placeholder="2.5"/></div>
+      <div class="field"><label>Extras (alberca, jardín...)</label><input type="text" id="a-feats" placeholder="Alberca, 2 cajones, jardín..."/></div>
+      <div class="field field-full">
+        <label>Descripción básica (yo la mejoro al publicar)</label>
+        <textarea id="a-desc" placeholder="Casa de dos pisos, amplia cocina abierta, jardín con asador, excelente ubicación en zona segura..."></textarea>
+      </div>
+      <div class="photo-upload">
+        <input type="file" id="a-photos" accept="image/*" multiple onchange="previewPhotos(this)"/>
+        <p>📸 <strong>Arrastra o haz clic para subir fotos</strong></p>
+        <p style="margin-top:8px;font-size:.72rem;color:var(--s2)">JPG, PNG, WEBP · Múltiples fotos permitidas</p>
+      </div>
+      <div class="photo-previews" id="photo-previews"></div>
+      <div class="copy-gen">
+        <h4>✨ Auto-Copywriting — Descripción Premium</h4>
+        <div class="copy-output" id="copy-output">La descripción generada aparecerá aquí. Llena los campos y haz clic en "Generar".</div>
+        <button class="copy-btn" onclick="generateCopy()">✨ Generar descripción premium</button>
+      </div>
+      <button class="admin-submit" onclick="saveProperty()">Publicar propiedad →</button>
+    </div>
+  </div>
+  <div class="admin-section" id="tab-list">
+    <div class="prop-list" id="admin-prop-list"></div>
+  </div>
+</div>
+
+<!-- PRINT SHEET -->
+<div id="print-sheet" style="display:none"></div>
+
+<script>
+// ── SCROLL HELPER ──────────────────────────
+function goTo(id){
+  const el=document.getElementById(id);
+  if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ── NAV MOBILE ─────────────────────────────
+function toggleMob(){
+  const m=document.getElementById('mob-menu');
+  const h=document.getElementById('hamburger');
+  m.classList.toggle('open');
+  h.classList.toggle('open');
+}
+// Cerrar menú al hacer clic en un enlace
+document.querySelectorAll('.mob-menu a').forEach(a=>{
+  a.addEventListener('click',()=>{
+    document.getElementById('mob-menu').classList.remove('open');
+    document.getElementById('hamburger').classList.remove('open');
+  });
+});
+
+// ── HERO PARALLAX ─────────────────────────
+window.addEventListener('scroll',()=>{
+  const y=window.scrollY;
+  const bg=document.getElementById('hero-bg');
+  if(y<window.innerHeight&&bg) bg.style.transform=`scale(1.08) translateY(${y*.12}px)`;
+});
+
+// ── REVEAL ON SCROLL ──────────────────────
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}});
+},{threshold:.1});
+document.querySelectorAll('.r').forEach(el=>obs.observe(el));
+
+// ── FORM ──────────────────────────────────
+function onProyecto(){
+  const val=document.getElementById('fi-proj').value;
+  // ocultar todos
+  ['budget-inversion','budget-casa','budget-terreno','extra-terreno'].forEach(id=>{
+    document.getElementById(id).style.display='none';
+  });
+  if(val==='inversion') document.getElementById('budget-inversion').style.display='flex';
+  else if(val==='casa') document.getElementById('budget-casa').style.display='flex';
+  else if(val==='terreno'){
+    document.getElementById('budget-terreno').style.display='flex';
+    document.getElementById('extra-terreno').style.display='flex';
+  }
+}
+function sf(e){
+  e.preventDefault();
+  const proySel=document.getElementById('fi-proj');
+  const proyText=proySel.options[proySel.selectedIndex].text;
+  const budgets={
+    'budget-inversion':'fi-budget-inv',
+    'budget-casa':'fi-budget-casa',
+    'budget-terreno':'fi-budget-ter'
+  };
+  let presupuesto='';
+  Object.entries(budgets).forEach(([divId,selId])=>{
+    const el=document.getElementById(divId);
+    if(el&&el.style.display!=='none') presupuesto=document.getElementById(selId).value;
+  });
+  const lead={
+    id:Date.now(),
+    nombre:document.getElementById('fi-nombre').value,
+    telefono:document.getElementById('fi-tel').value,
+    email:document.getElementById('fi-email').value,
+    proyecto:proyText,
+    tipo:proySel.value,
+    presupuesto,
+    uso_terreno:document.getElementById('fi-terreno-uso')?.value||'',
+    estado:'nuevo',
+    fecha:new Date().toISOString(),
+    notas:[]
+  };
+  const leads=JSON.parse(localStorage.getItem('kaivo_leads')||'[]');
+  leads.unshift(lead);
+  localStorage.setItem('kaivo_leads',JSON.stringify(leads));
+  document.getElementById('lf').style.display='none';
+  document.getElementById('fok').classList.add('show');
+}
+
+// ── PREVENTA MODALS ───────────────────────
+const projMap={beara:'modal-beara',aunna:'modal-aunna',diana:'modal-diana',belanta:'modal-belanta'};
+function openProj(id){
+  closeAllModals();
+  document.getElementById(projMap[id]).classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(id){
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow='';
+}
+function bgClose(e,id){
+  if(e.target===e.currentTarget) closeModal(id);
+}
+function closeAllModals(){
+  document.querySelectorAll('.modal-bg').forEach(m=>m.classList.remove('open'));
+  document.body.style.overflow='';
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape') closeAllModals();});
+
+// ── STORAGE ───────────────────────────────
+let properties=JSON.parse(localStorage.getItem('kaivo_props')||'[]');
+let photosB64=[];
+function saveProps(){localStorage.setItem('kaivo_props',JSON.stringify(properties));}
+
+// ── RENDER PROPERTY GRID ──────────────────
+function renderGrid(){
+  const grid=document.getElementById('prop-grid');
+  if(!properties.length){
+    grid.innerHTML='<div class="empty-state"><p>Próximamente propiedades disponibles.</p><small>¿Tienes una propiedad? <a href="#contacto" style="color:var(--accent)">Contáctanos.</a></small></div>';
+    return;
+  }
+  grid.innerHTML=properties.map((p,i)=>`
+    <div class="prop-card" onclick="openPropModal(${i})">
+      <div class="prop-img">
+        <img src="${p.photos[0]||''}" alt="${p.name}" loading="lazy"/>
+        <span class="prop-tag">${p.typeLabel}</span>
+      </div>
+      <div class="prop-body">
+        <h3>${p.name}</h3>
+        <p class="prop-location">📍 ${p.location}</p>
+        <div class="prop-features">
+          ${p.m2?`<span class="feat">📐 ${p.m2} m²</span>`:''}
+          ${p.beds?`<span class="feat">🛏 ${p.beds} rec</span>`:''}
+          ${p.baths?`<span class="feat">🚿 ${p.baths} baños</span>`:''}
+        </div>
+        <p class="prop-price">${p.price}</p>
+        <div class="prop-cta-row">
+          <button class="prop-btn prim" onclick="event.stopPropagation();openPropModal(${i})">Ver detalles</button>
+          <button class="prop-btn sec" onclick="event.stopPropagation();printSheet(${i},true)">📄 Ficha</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+renderGrid();
+
+// ── PROPERTY MODAL ────────────────────────
+let galIdx=0;
+function openPropModal(i){
+  const p=properties[i];
+  let m=document.getElementById('modal-bg-prop');
+  if(!m){
+    m=document.createElement('div');
+    m.className='modal-bg';m.id='modal-bg-prop';
+    m.innerHTML=`<div class="modal">
+      <button class="modal-close" onclick="closePropModal()">✕</button>
+      <div class="modal-gallery" id="pm-gallery">
+        <img id="pm-gimg" src="" alt=""/>
+        <div class="gallery-nav">
+          <button class="gal-btn" onclick="galNav(-1)">‹</button>
+          <button class="gal-btn" onclick="galNav(1)">›</button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <p class="modal-dev" id="pm-type"></p>
+        <h2 id="pm-name"></h2>
+        <p class="modal-price" id="pm-price"></p>
+        <div class="modal-specs" id="pm-specs"></div>
+        <p class="modal-desc" id="pm-desc"></p>
+        <div class="modal-actions" id="pm-actions"></div>
+      </div>
+    </div>`;
+    m.addEventListener('click',e=>{if(e.target===m)closePropModal();});
+    document.body.appendChild(m);
+  }
+  galIdx=0;
+  window._ci=i;
+  fillPropModal(p,i);
+  m.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closePropModal(){
+  const m=document.getElementById('modal-bg-prop');
+  if(m){m.classList.remove('open');document.body.style.overflow='';}
+}
+function fillPropModal(p,i){
+  document.getElementById('pm-gimg').src=p.photos[galIdx]||'';
+  document.getElementById('pm-type').textContent=p.typeLabel+' · '+p.location;
+  document.getElementById('pm-name').textContent=p.name;
+  document.getElementById('pm-price').textContent=p.price;
+  document.getElementById('pm-specs').innerHTML=`
+    ${p.m2?`<div class="modal-spec"><strong>${p.m2} m²</strong><span>Superficie</span></div>`:''}
+    ${p.beds?`<div class="modal-spec"><strong>${p.beds}</strong><span>Recámaras</span></div>`:''}
+    ${p.baths?`<div class="modal-spec"><strong>${p.baths}</strong><span>Baños</span></div>`:''}
+    ${p.feats?`<div class="modal-spec"><strong style="font-size:.78rem">${p.feats}</strong><span>Extras</span></div>`:''}
+  `;
+  document.getElementById('pm-desc').textContent=p.copyDesc||p.desc;
+  document.getElementById('pm-actions').innerHTML=`
+    <button class="modal-btn gold" onclick="closePropModal();goTo('contacto')">Me interesa →</button>
+    <button class="modal-btn out" onclick="printSheet(${i},true)">📄 Ficha con logo</button>
+    <button class="modal-btn out" onclick="printSheet(${i},false)">📄 Sin logo</button>
+  `;
+}
+function galNav(d){
+  const p=properties[window._ci];
+  if(!p||!p.photos.length)return;
+  galIdx=(galIdx+d+p.photos.length)%p.photos.length;
+  document.getElementById('pm-gimg').src=p.photos[galIdx];
+}
+
+// ── PRINT / PDF ───────────────────────────
+function printSheet(i,withLogo){
+  const p=properties[i];
+  const sheet=document.getElementById('print-sheet');
+  sheet.style.display='block';
+  const photos=p.photos.slice(0,4).map(s=>`<img src="${s}" alt=""/>`).join('');
+  sheet.innerHTML=`
+    ${withLogo?`<div class="print-logo-wrap">
+      <div class="print-kaivo">KAIVO</div>
+      <div class="print-re">Real Estate</div>
+    </div>`:''}
+    <h1 class="print-title">${p.name}</h1>
+    <p class="print-price">${p.price}</p>
+    <div class="print-specs">
+      ${p.m2?`<div class="print-spec"><strong>${p.m2} m²</strong><span>Superficie</span></div>`:''}
+      ${p.beds?`<div class="print-spec"><strong>${p.beds}</strong><span>Recámaras</span></div>`:''}
+      ${p.baths?`<div class="print-spec"><strong>${p.baths}</strong><span>Baños</span></div>`:''}
+      <div class="print-spec"><strong>${p.location}</strong><span>Ubicación</span></div>
+    </div>
+    ${photos?`<div class="print-photos">${photos}</div>`:''}
+    <p class="print-desc">${p.copyDesc||p.desc}</p>
+    ${withLogo?`<p class="print-footer">KAIVO REAL ESTATE · Aguascalientes, México · kaivomx@gmail.com · +52 449 457 7041</p>`:''}
+  `;
+  setTimeout(()=>{window.print();setTimeout(()=>{sheet.style.display='none';},500);},120);
+}
+
+// ── ADMIN PANEL ───────────────────────────
+let logoClicks=0,logoTimer=null;
+document.getElementById('logo-btn').addEventListener('click',()=>{
+  logoClicks++;
+  clearTimeout(logoTimer);
+  logoTimer=setTimeout(()=>logoClicks=0,2000);
+  if(logoClicks>=7){logoClicks=0;promptAdmin();}
+});
+function promptAdmin(){
+  const pw=prompt('Acceso restringido — ingresa la clave:');
+  if(pw==='kaivo2025') openAdmin();
+  else if(pw!==null) alert('Clave incorrecta.');
+}
+function openAdmin(){document.getElementById('admin-panel').classList.add('open');renderAdminList();}
+function closeAdmin(){document.getElementById('admin-panel').classList.remove('open');}
+function adminTab(e,t){
+  document.querySelectorAll('.admin-tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.admin-section').forEach(s=>s.classList.remove('active'));
+  e.target.classList.add('active');
+  document.getElementById('tab-'+t).classList.add('active');
+  if(t==='list') renderAdminList();
+}
+function previewPhotos(input){
+  const prev=document.getElementById('photo-previews');
+  prev.innerHTML='';photosB64=[];
+  Array.from(input.files).forEach(f=>{
+    const r=new FileReader();
+    r.onload=ev=>{
+      photosB64.push(ev.target.result);
+      const img=document.createElement('img');
+      img.src=ev.target.result;img.className='photo-thumb';
+      prev.appendChild(img);
+    };
+    r.readAsDataURL(f);
+  });
+}
+
+// ── AUTO COPYWRITING ──────────────────────
+function generateCopy(){
+  const name=document.getElementById('a-name').value.trim();
+  const type=document.getElementById('a-type').value;
+  const loc=document.getElementById('a-loc').value.trim()||'Aguascalientes';
+  const price=document.getElementById('a-price').value.trim();
+  const m2=document.getElementById('a-m2').value.trim();
+  const beds=document.getElementById('a-beds').value;
+  const baths=document.getElementById('a-baths').value;
+  const feats=document.getElementById('a-feats').value.trim();
+  const desc=document.getElementById('a-desc').value.trim();
+  const tl={casa:'casa residencial',depto:'departamento',lote:'lote residencial',oficina:'local comercial'}[type]||type;
+  const openers=[
+    `Pocas propiedades en ${loc} combinan todo lo que ${name||'esta '+tl} ofrece.`,
+    `Ubicada en ${loc}, esta ${tl} es exactamente lo que llevas buscando.`,
+    `En un mercado donde escasean las oportunidades reales, ${name||'esta propiedad'} llega a cambiar las reglas.`,
+    `${name||'Esta propiedad'} no es solo un inmueble — es el escenario perfecto para la siguiente etapa de tu vida.`
+  ];
+  const opener=openers[Math.floor(Math.random()*openers.length)];
+  let body='';
+  if(m2) body+=`Con ${m2} m² de construcción`;
+  if(beds) body+=(body?', ':'')+`${beds} recámaras`;
+  if(baths) body+=(body?' y ':'')+`${baths} baños`;
+  if(body) body+=' — ';
+  if(desc) body+=desc+' ';
+  if(feats) body+=`Cuenta además con: ${feats}. `;
+  const closers={
+    casa:`Vivir aquí no es un gasto — es la mejor inversión que puedes hacer por tu familia y tu patrimonio. ${price?'El precio de '+price+' refleja el valor real de un hogar pensado para durar décadas.':''}`,
+    depto:`Los departamentos en ${loc} han crecido en plusvalía de manera consistente. Si buscas rentabilidad o tu próximo hogar, esta unidad cumple ambos objetivos con creces.`,
+    terreno:`Un terreno en ${loc} es el lienzo en blanco para tu proyecto de vida. Con KAIVO puedes comprarlo y construir a la medida — diseño personalizado, materiales de calidad y precio justo. La tierra no se fabrica; la plusvalía en esta zona ha superado la inflación año tras año.`,
+    lote:`La tierra no se fabrica. Un lote en ${loc} es el activo más sólido que puedes adquirir hoy. La plusvalía en esta zona ha superado la inflación por años consecutivos.`,
+    oficina:`Ubicación estratégica, infraestructura lista y acceso inmediato. Todo lo que tu negocio necesita para crecer, sin pagar de más por metros que no usarás.`
+  };
+  const copy=`${opener}\n\n${body}\n${closers[type]||closers.casa}\n\nContáctanos y agenda tu visita — las mejores propiedades no esperan.`;
+  document.getElementById('copy-output').textContent=copy;
+  return copy;
+}
+
+// ── SAVE PROPERTY ─────────────────────────
+function saveProperty(){
+  const name=document.getElementById('a-name').value.trim();
+  if(!name){alert('Ingresa el nombre de la propiedad.');return;}
+  const typeVal=document.getElementById('a-type').value;
+  const typeLabels={casa:'Casa',depto:'Departamento',terreno:'Terreno',lote:'Lote',oficina:'Oficina / Local'};
+  const copyOut=document.getElementById('copy-output').textContent;
+  const hasCopy=copyOut&&!copyOut.startsWith('La descripción');
+  const prop={
+    id:Date.now(),name,type:typeVal,typeLabel:typeLabels[typeVal]||typeVal,
+    location:document.getElementById('a-loc').value.trim()||'Aguascalientes',
+    price:document.getElementById('a-price').value.trim()||'Consultar',
+    m2:document.getElementById('a-m2').value.trim(),
+    beds:document.getElementById('a-beds').value,
+    baths:document.getElementById('a-baths').value,
+    feats:document.getElementById('a-feats').value.trim(),
+    desc:document.getElementById('a-desc').value.trim(),
+    copyDesc:hasCopy?copyOut:'',
+    photos:[...photosB64]
+  };
+  properties.unshift(prop);saveProps();renderGrid();renderAdminList();
+  ['a-name','a-loc','a-price','a-m2','a-beds','a-baths','a-feats','a-desc'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('photo-previews').innerHTML='';
+  document.getElementById('copy-output').textContent='La descripción generada aparecerá aquí. Llena los campos y haz clic en "Generar".';
+  photosB64=[];
+  // switch to list tab
+  document.querySelectorAll('.admin-tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.admin-section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.admin-tab')[1].classList.add('active');
+  document.getElementById('tab-list').classList.add('active');
+  alert(`✅ "${name}" publicada correctamente.`);
+}
+
+// ── ADMIN LIST ────────────────────────────
+function renderAdminList(){
+  const list=document.getElementById('admin-prop-list');
+  if(!properties.length){list.innerHTML='<p style="color:var(--s2);padding:32px 0">No hay propiedades publicadas aún.</p>';return;}
+  list.innerHTML=properties.map((p,i)=>`
+    <div class="prop-list-item">
+      ${p.photos[0]?`<img src="${p.photos[0]}" alt="${p.name}"/>`:'<div style="width:60px;height:48px;background:var(--b);border-radius:4px;flex-shrink:0"></div>'}
+      <div class="prop-list-info">
+        <strong>${p.name}</strong>
+        <span>${p.typeLabel} · ${p.location} · ${p.price}</span>
+      </div>
+      <button class="del-btn" onclick="deleteProp(${i})">Eliminar</button>
+    </div>
+  `).join('');
+}
+function deleteProp(i){
+  if(!confirm(`¿Eliminar "${properties[i].name}"?`))return;
+  properties.splice(i,1);saveProps();renderGrid();renderAdminList();
+}
+</script>
+</body>
+</html>

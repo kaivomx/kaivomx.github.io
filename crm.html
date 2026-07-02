@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>KAIVO CRM</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#09090a;--s:#0f0f11;--card:#161618;--b:#252528;--b2:#1e1e21;
+  --silver:#a8a4a0;--s2:#68645f;--w:#f0ece6;--w2:#c0bbb4;
+  --accent:#c9b89a;--accent2:#a8987a;
+  --green:#4ade80;--red:#f87171;--yellow:#fbbf24;--blue:#60a5fa;--purple:#a78bfa;
+  --sidebar:240px;
+}
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--w);font-family:'Inter',sans-serif;display:flex}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;font-family:'Inter',sans-serif;border:none}
+input,select,textarea{font-family:'Inter',sans-serif}
+
+/* ── LOGIN ── */
+#login-screen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:32px}
+.login-box{background:var(--card);border:1px solid var(--b);border-radius:12px;padding:48px 40px;width:360px;text-align:center}
+.login-logo{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:28px;letter-spacing:8px;color:var(--w);margin-bottom:4px}
+.login-sub{font-size:9px;letter-spacing:4px;color:var(--silver);margin-bottom:32px}
+.login-label{font-size:.7rem;letter-spacing:2px;color:var(--s2);text-transform:uppercase;display:block;margin-bottom:8px;text-align:left}
+.login-input{width:100%;background:var(--s);border:1px solid var(--b);border-radius:6px;padding:12px 16px;color:var(--w);font-size:.9rem;outline:none;margin-bottom:20px;transition:border .3s}
+.login-input:focus{border-color:rgba(201,184,154,.4)}
+.login-btn{width:100%;background:var(--accent);color:var(--bg);padding:13px;border-radius:6px;font-size:.8rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;transition:all .3s}
+.login-btn:hover{background:var(--w)}
+.login-err{color:var(--red);font-size:.78rem;margin-top:12px;display:none}
+
+/* ── SIDEBAR ── */
+.sidebar{width:var(--sidebar);min-width:var(--sidebar);background:var(--s);border-right:1px solid var(--b);display:flex;flex-direction:column;height:100vh;overflow-y:auto}
+.sidebar-logo{padding:24px 20px 20px;border-bottom:1px solid var(--b)}
+.sidebar-logo .k{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:22px;letter-spacing:6px;color:var(--w)}
+.sidebar-logo .re{font-size:8px;letter-spacing:4px;color:var(--silver);text-transform:uppercase}
+.sidebar-logo .crm-tag{font-size:9px;letter-spacing:3px;color:var(--accent);text-transform:uppercase;margin-top:6px;display:block}
+nav.sidenav{flex:1;padding:16px 0}
+.nav-section{font-size:.62rem;letter-spacing:3px;color:var(--s2);text-transform:uppercase;padding:16px 20px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 20px;cursor:pointer;transition:all .25s;border-left:2px solid transparent;color:var(--s2);font-size:.82rem}
+.nav-item:hover{background:rgba(201,184,154,.05);color:var(--w2)}
+.nav-item.active{background:rgba(201,184,154,.08);color:var(--accent);border-left-color:var(--accent)}
+.nav-item .icon{font-size:15px;width:20px;text-align:center}
+.nav-badge{margin-left:auto;background:var(--accent);color:var(--bg);border-radius:10px;padding:1px 7px;font-size:.65rem;font-weight:700}
+.sidebar-footer{padding:16px 20px;border-top:1px solid var(--b)}
+.sidebar-footer a{font-size:.75rem;color:var(--s2);display:flex;align-items:center;gap:8px;transition:color .3s}
+.sidebar-footer a:hover{color:var(--accent)}
+
+/* ── MAIN ── */
+.main{flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+.topbar{height:56px;min-height:56px;background:var(--s);border-bottom:1px solid var(--b);display:flex;align-items:center;justify-content:space-between;padding:0 28px}
+.topbar h1{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:1.5rem;color:var(--w)}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.topbar-btn{background:var(--accent);color:var(--bg);padding:7px 16px;border-radius:4px;font-size:.72rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;transition:all .3s}
+.topbar-btn:hover{background:var(--w)}
+.topbar-btn.ghost{background:transparent;border:1px solid var(--b);color:var(--s2)}
+.topbar-btn.ghost:hover{border-color:var(--accent);color:var(--accent)}
+.content{flex:1;overflow-y:auto;padding:28px}
+
+/* ── VIEWS ── */
+.view{display:none}
+.view.active{display:block}
+
+/* ── DASHBOARD ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+.kpi{background:var(--card);border:1px solid var(--b);border-radius:10px;padding:20px 22px;position:relative;overflow:hidden}
+.kpi::after{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.kpi.k1::after{background:var(--accent)}
+.kpi.k2::after{background:var(--green)}
+.kpi.k3::after{background:var(--blue)}
+.kpi.k4::after{background:var(--purple)}
+.kpi-val{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:300;color:var(--w);line-height:1}
+.kpi-label{font-size:.7rem;letter-spacing:1.5px;color:var(--s2);text-transform:uppercase;margin-top:6px}
+.dash-grid{display:grid;grid-template-columns:1.6fr 1fr;gap:20px}
+.dash-card{background:var(--card);border:1px solid var(--b);border-radius:10px;padding:22px}
+.dash-card h3{font-size:.75rem;letter-spacing:2px;text-transform:uppercase;color:var(--silver);margin-bottom:16px}
+.activity-item{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--b2)}
+.activity-item:last-child{border-bottom:none}
+.act-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:4px}
+.act-text{font-size:.8rem;color:var(--w2);line-height:1.5}
+.act-time{font-size:.7rem;color:var(--s2);margin-top:2px}
+.pipeline-mini{display:flex;flex-direction:column;gap:6px}
+.pipe-row{display:flex;align-items:center;gap:10px}
+.pipe-label{font-size:.75rem;color:var(--s2);width:90px}
+.pipe-bar-wrap{flex:1;background:var(--b2);border-radius:3px;height:6px;overflow:hidden}
+.pipe-bar{height:100%;border-radius:3px;transition:width .6s}
+.pipe-count{font-size:.72rem;color:var(--w2);width:20px;text-align:right}
+
+/* ── LEADS / KANBAN ── */
+.kanban{display:flex;gap:14px;height:calc(100vh - 140px);overflow-x:auto;padding-bottom:16px}
+.kboard{min-width:250px;width:250px;background:var(--card);border:1px solid var(--b);border-radius:10px;display:flex;flex-direction:column;max-height:100%}
+.kboard-head{padding:14px 16px;border-bottom:1px solid var(--b);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.kboard-title{font-size:.72rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase}
+.kboard-count{background:var(--b2);border-radius:10px;padding:2px 8px;font-size:.68rem;color:var(--s2)}
+.kboard-body{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:8px}
+.lead-card{background:var(--s);border:1px solid var(--b2);border-radius:8px;padding:12px;cursor:pointer;transition:all .3s}
+.lead-card:hover{border-color:rgba(201,184,154,.25);box-shadow:0 4px 20px rgba(0,0,0,.3)}
+.lc-name{font-size:.85rem;color:var(--w);font-weight:500;margin-bottom:4px}
+.lc-proj{font-size:.72rem;color:var(--accent);margin-bottom:8px}
+.lc-meta{display:flex;gap:6px;flex-wrap:wrap}
+.lc-tag{font-size:.65rem;background:rgba(255,255,255,.05);border:1px solid var(--b);border-radius:3px;padding:2px 6px;color:var(--s2)}
+.lc-date{font-size:.65rem;color:var(--s2);margin-top:6px}
+.lc-actions{display:flex;gap:6px;margin-top:8px}
+.lc-btn{flex:1;padding:5px;border-radius:4px;font-size:.65rem;font-weight:600;letter-spacing:.5px;transition:all .2s;text-align:center}
+.lc-btn.wa{background:rgba(37,211,102,.12);border:1px solid rgba(37,211,102,.2);color:#4ade80}
+.lc-btn.wa:hover{background:rgba(37,211,102,.25)}
+.lc-btn.view{background:rgba(201,184,154,.08);border:1px solid rgba(201,184,154,.15);color:var(--accent)}
+.lc-btn.view:hover{background:rgba(201,184,154,.18)}
+
+/* ── LEAD DETAIL MODAL ── */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;align-items:center;justify-content:center;backdrop-filter:blur(8px);padding:20px}
+.modal-bg.open{display:flex}
+.modal{background:var(--card);border:1px solid var(--b);border-radius:14px;width:100%;max-width:620px;max-height:90vh;overflow-y:auto;position:relative}
+.modal-head{padding:24px 28px 16px;border-bottom:1px solid var(--b);display:flex;align-items:flex-start;justify-content:space-between}
+.modal-head h2{font-size:1.5rem;font-family:'Cormorant Garamond',serif;font-weight:300}
+.modal-close{width:32px;height:32px;background:var(--b);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--s2);cursor:pointer;flex-shrink:0;transition:all .3s}
+.modal-close:hover{background:rgba(201,184,154,.15);color:var(--accent)}
+.modal-body{padding:24px 28px}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
+.detail-item label{font-size:.65rem;letter-spacing:2px;color:var(--s2);text-transform:uppercase;display:block;margin-bottom:4px}
+.detail-item p{font-size:.88rem;color:var(--w)}
+.status-select{width:100%;background:var(--s);border:1px solid var(--b);border-radius:6px;padding:10px 12px;color:var(--w);font-size:.85rem;outline:none;margin-bottom:20px;appearance:none}
+.notes-section h4{font-size:.7rem;letter-spacing:2px;color:var(--silver);text-transform:uppercase;margin-bottom:12px}
+.note-item{background:var(--b2);border-radius:6px;padding:10px 12px;margin-bottom:8px}
+.note-item p{font-size:.82rem;color:var(--w2);line-height:1.6}
+.note-item span{font-size:.68rem;color:var(--s2);margin-top:4px;display:block}
+.note-input-wrap{display:flex;gap:8px;margin-top:8px}
+.note-input{flex:1;background:var(--s);border:1px solid var(--b);border-radius:6px;padding:9px 12px;color:var(--w);font-size:.82rem;outline:none;resize:none}
+.note-input:focus{border-color:rgba(201,184,154,.3)}
+.note-add-btn{background:var(--accent);color:var(--bg);padding:0 14px;border-radius:6px;font-size:.72rem;font-weight:600}
+.modal-actions{display:flex;gap:10px;margin-top:20px;padding-top:20px;border-top:1px solid var(--b)}
+.ma-btn{flex:1;padding:11px;border-radius:6px;font-size:.75rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;transition:all .3s;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px}
+.ma-btn.green{background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.2);color:var(--green)}
+.ma-btn.green:hover{background:rgba(74,222,128,.25)}
+.ma-btn.red{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.15);color:var(--red)}
+.ma-btn.red:hover{background:rgba(248,113,113,.2)}
+.ma-btn.accent{background:var(--accent);border:none;color:var(--bg)}
+.ma-btn.accent:hover{background:var(--w)}
+
+/* ── PROPIEDADES / PROYECTOS ── */
+.prop-mgr{display:grid;grid-template-columns:1fr 1.2fr;gap:20px;align-items:start}
+.form-card{background:var(--card);border:1px solid var(--b);border-radius:10px;padding:24px}
+.form-card h3{font-size:.75rem;letter-spacing:2px;text-transform:uppercase;color:var(--silver);margin-bottom:20px}
+.f-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.f-full{grid-column:1/-1}
+.f-label{font-size:.68rem;letter-spacing:1.5px;color:var(--s2);text-transform:uppercase;display:block;margin-bottom:5px}
+.f-input{width:100%;background:var(--s);border:1px solid var(--b2);border-radius:6px;padding:10px 12px;color:var(--w);font-size:.85rem;outline:none;transition:border .3s;appearance:none}
+.f-input:focus{border-color:rgba(201,184,154,.4)}
+.f-textarea{resize:vertical;min-height:80px}
+.photo-drop{border:1px dashed var(--b);border-radius:8px;padding:24px;text-align:center;cursor:pointer;transition:all .3s;position:relative;grid-column:1/-1}
+.photo-drop:hover{border-color:var(--accent)}
+.photo-drop input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.photo-drop p{color:var(--s2);font-size:.8rem}
+.photo-drop strong{color:var(--accent)}
+.thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;grid-column:1/-1}
+.thumb{width:70px;height:55px;object-fit:cover;border-radius:5px;border:1px solid var(--b)}
+.copy-box{background:var(--b2);border:1px solid var(--b);border-radius:6px;padding:12px;font-size:.78rem;color:var(--w2);line-height:1.8;min-height:60px;margin:10px 0;white-space:pre-wrap;grid-column:1/-1}
+.btn-gen{background:rgba(201,184,154,.1);border:1px solid rgba(201,184,154,.2);color:var(--accent);padding:7px 16px;border-radius:4px;font-size:.7rem;letter-spacing:1.5px;text-transform:uppercase;transition:all .3s;cursor:pointer}
+.btn-gen:hover{background:var(--accent);color:var(--bg)}
+.btn-save{background:var(--accent);color:var(--bg);padding:11px;border-radius:6px;font-size:.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;transition:all .3s;width:100%;margin-top:8px;grid-column:1/-1}
+.btn-save:hover{background:var(--w)}
+.list-card{background:var(--card);border:1px solid var(--b);border-radius:10px;overflow:hidden}
+.list-head{padding:14px 18px;border-bottom:1px solid var(--b);display:flex;align-items:center;justify-content:space-between}
+.list-head span{font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--silver)}
+.list-items{max-height:600px;overflow-y:auto}
+.list-item{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--b2);transition:background .2s}
+.list-item:hover{background:rgba(255,255,255,.02)}
+.list-item:last-child{border-bottom:none}
+.list-item img,.list-img-ph{width:56px;height:44px;object-fit:cover;border-radius:5px;flex-shrink:0}
+.list-img-ph{background:var(--b2);display:flex;align-items:center;justify-content:center;font-size:18px}
+.list-info{flex:1;min-width:0}
+.list-info strong{font-size:.83rem;color:var(--w);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.list-info span{font-size:.72rem;color:var(--s2)}
+.list-actions{display:flex;gap:6px}
+.icon-btn{width:30px;height:30px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:13px;transition:all .2s;cursor:pointer;background:transparent;border:1px solid var(--b)}
+.icon-btn:hover{background:var(--b2)}
+.icon-btn.del:hover{border-color:rgba(248,113,113,.3);background:rgba(248,113,113,.08);color:var(--red)}
+
+/* ── PROYECTOS ── */
+.proj-edit-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.proj-edit-card{background:var(--card);border:1px solid var(--b);border-radius:10px;padding:20px}
+.proj-edit-card h3{font-size:.75rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:16px}
+.proj-name-tag{font-size:1.1rem;font-family:'Cormorant Garamond',serif;color:var(--w);margin-bottom:14px}
+
+/* ── CONFIGURACIÓN ── */
+.config-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:800px}
+.config-section{background:var(--card);border:1px solid var(--b);border-radius:10px;padding:24px}
+.config-section h3{font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--silver);margin-bottom:18px}
+.config-field{margin-bottom:14px}
+
+/* ── FICHAS ── */
+.fichas-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.ficha-card{background:var(--card);border:1px solid var(--b);border-radius:10px;overflow:hidden;transition:all .3s}
+.ficha-card:hover{border-color:rgba(201,184,154,.2);transform:translateY(-2px)}
+.ficha-img{height:150px;overflow:hidden;background:var(--b2);display:flex;align-items:center;justify-content:center;font-size:32px}
+.ficha-img img{width:100%;height:100%;object-fit:cover}
+.ficha-body{padding:14px}
+.ficha-body h3{font-size:.9rem;color:var(--w);margin-bottom:4px;font-family:'Cormorant Garamond',serif}
+.ficha-body p{font-size:.74rem;color:var(--s2);margin-bottom:12px}
+.ficha-btns{display:flex;gap:6px}
+.ficha-btn{flex:1;padding:7px;border-radius:4px;font-size:.65rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;transition:all .3s;text-align:center;cursor:pointer}
+.ficha-btn.prim{background:var(--accent);color:var(--bg);border:none}
+.ficha-btn.prim:hover{background:var(--w)}
+.ficha-btn.sec{background:transparent;border:1px solid var(--b);color:var(--s2)}
+.ficha-btn.sec:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ── EMPTY ── */
+.empty{text-align:center;padding:60px 20px;color:var(--s2)}
+.empty .e-icon{font-size:2.5rem;margin-bottom:12px;opacity:.4}
+.empty p{font-size:.85rem}
+
+/* ── PRINT ── */
+@media print{
+  body>*:not(#print-sheet){display:none!important}
+  #print-sheet{display:block!important;position:static;background:#fff;color:#111;padding:48px;font-family:'Inter',sans-serif}
+  .pk{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;letter-spacing:8px;color:#111;text-transform:uppercase}
+  .pre{font-size:9px;letter-spacing:5px;color:#888;text-transform:uppercase;margin-bottom:24px;display:block}
+  .pt{font-size:1.8rem;font-family:'Cormorant Garamond',serif;margin:0 0 6px;font-weight:300;color:#111}
+  .pp{font-size:1.4rem;font-family:'Cormorant Garamond',serif;color:#9a7830;margin-bottom:18px}
+  .ps{display:flex;gap:20px;padding:12px 18px;background:#f7f6f4;border-radius:6px;margin-bottom:18px;flex-wrap:wrap}
+  .ps div strong{display:block;font-size:.95rem;color:#111}
+  .ps div span{font-size:.65rem;color:#888;letter-spacing:1.5px;text-transform:uppercase}
+  .ph{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+  .ph img{width:100%;height:170px;object-fit:cover;border-radius:6px}
+  .pd{font-size:.83rem;line-height:1.85;color:#444}
+  .pf{margin-top:28px;padding-top:14px;border-top:1px solid #e8e8e8;font-size:.68rem;color:#aaa;letter-spacing:1px}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">KAIVO</div>
+    <div class="login-sub" style="margin-bottom:8px">REAL ESTATE</div>
+    <div class="login-sub">CRM · Panel de control</div>
+    <br/>
+    <label class="login-label">Contraseña</label>
+    <input type="password" class="login-input" id="pw-input" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/>
+    <button class="login-btn" onclick="doLogin()">Entrar al CRM</button>
+    <p class="login-err" id="login-err">Contraseña incorrecta</p>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar" style="display:none">
+  <div class="sidebar-logo">
+    <div class="k">KAIVO</div>
+    <div class="re">Real Estate</div>
+    <span class="crm-tag">Panel CRM</span>
+  </div>
+  <nav class="sidenav">
+    <div class="nav-section">Principal</div>
+    <div class="nav-item active" onclick="showView('dashboard',this)"><span class="icon">📊</span> Dashboard</div>
+    <div class="nav-item" onclick="showView('leads',this)"><span class="icon">👥</span> Pipeline de Leads <span class="nav-badge" id="badge-leads">0</span></div>
+    <div class="nav-section">Catálogo</div>
+    <div class="nav-item" onclick="showView('propiedades',this)"><span class="icon">🏡</span> Propiedades</div>
+    <div class="nav-item" onclick="showView('proyectos',this)"><span class="icon">🏗️</span> Proyectos Preventa</div>
+    <div class="nav-item" onclick="showView('fichas',this)"><span class="icon">📄</span> Fichas PDF</div>
+    <div class="nav-section">Sistema</div>
+    <div class="nav-item" onclick="showView('config',this)"><span class="icon">⚙️</span> Configuración</div>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="index.html" target="_blank">🌐 Ver sitio web →</a>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main" id="main-app" style="display:none">
+  <div class="topbar">
+    <h1 id="topbar-title">Dashboard</h1>
+    <div class="topbar-right">
+      <button class="topbar-btn ghost" onclick="doLogout()">Cerrar sesión</button>
+    </div>
+  </div>
+  <div class="content">
+
+    <!-- ── DASHBOARD ── -->
+    <div class="view active" id="view-dashboard">
+      <div class="kpi-grid">
+        <div class="kpi k1"><div class="kpi-val" id="kpi-total">0</div><div class="kpi-label">Total Leads</div></div>
+        <div class="kpi k2"><div class="kpi-val" id="kpi-nuevos">0</div><div class="kpi-label">Leads Nuevos</div></div>
+        <div class="kpi k3"><div class="kpi-val" id="kpi-props">0</div><div class="kpi-label">Propiedades</div></div>
+        <div class="kpi k4"><div class="kpi-val" id="kpi-cerrados">0</div><div class="kpi-label">Cierres</div></div>
+      </div>
+      <div class="dash-grid">
+        <div class="dash-card">
+          <h3>Actividad Reciente</h3>
+          <div id="dash-activity"></div>
+        </div>
+        <div class="dash-card">
+          <h3>Pipeline por Etapa</h3>
+          <div class="pipeline-mini" id="dash-pipeline"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── LEADS KANBAN ── -->
+    <div class="view" id="view-leads">
+      <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap">
+        <input class="f-input" style="max-width:260px" id="search-leads" placeholder="🔍 Buscar lead..." oninput="renderKanban()"/>
+        <button class="topbar-btn" onclick="openAddLead()">+ Agregar lead</button>
+      </div>
+      <div class="kanban" id="kanban-board"></div>
+    </div>
+
+    <!-- ── PROPIEDADES ── -->
+    <div class="view" id="view-propiedades">
+      <div class="prop-mgr">
+        <div class="form-card">
+          <h3 id="prop-form-title">Nueva Propiedad</h3>
+          <div class="f-grid">
+            <div class="f-full"><label class="f-label">Nombre *</label><input class="f-input" id="p-name" placeholder="Casa en Campestre..."/></div>
+            <div><label class="f-label">Tipo</label>
+              <select class="f-input" id="p-type">
+                <option value="casa">Casa</option>
+                <option value="depto">Departamento</option>
+                <option value="terreno">Terreno</option>
+                <option value="lote">Lote</option>
+                <option value="oficina">Oficina / Local</option>
+              </select>
+            </div>
+            <div><label class="f-label">Colonia</label><input class="f-input" id="p-loc" placeholder="Campestre..."/></div>
+            <div><label class="f-label">Precio</label><input class="f-input" id="p-price" placeholder="$3,500,000"/></div>
+            <div><label class="f-label">m²</label><input class="f-input" id="p-m2" placeholder="150"/></div>
+            <div><label class="f-label">Recámaras</label><input class="f-input" type="number" id="p-beds" placeholder="3" min="0"/></div>
+            <div><label class="f-label">Baños</label><input class="f-input" id="p-baths" placeholder="2.5"/></div>
+            <div><label class="f-label">Extras</label><input class="f-input" id="p-feats" placeholder="Alberca, jardín..."/></div>
+            <div class="f-full"><label class="f-label">Descripción básica</label><textarea class="f-input f-textarea" id="p-desc" placeholder="Describe brevemente la propiedad..."></textarea></div>
+            <div class="photo-drop f-full">
+              <input type="file" accept="image/*" multiple onchange="handlePhotos(this)"/>
+              <p>📸 <strong>Arrastra o selecciona fotos</strong></p>
+            </div>
+            <div class="thumbs f-full" id="p-thumbs"></div>
+            <div class="f-full">
+              <button class="btn-gen" onclick="genCopyProp()">✨ Generar descripción premium</button>
+              <div class="copy-box f-full" id="p-copy">La descripción generada aparecerá aquí.</div>
+            </div>
+            <button class="btn-save f-full" onclick="saveProp()">Publicar en el sitio →</button>
+          </div>
+        </div>
+        <div class="list-card">
+          <div class="list-head"><span>Propiedades Publicadas</span><span id="prop-count" style="color:var(--accent)">0</span></div>
+          <div class="list-items" id="prop-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PROYECTOS PREVENTA ── -->
+    <div class="view" id="view-proyectos">
+      <p style="font-size:.82rem;color:var(--s2);margin-bottom:20px">Edita los datos de los 4 proyectos en preventa. Los cambios se guardan localmente.</p>
+      <div class="proj-edit-grid" id="proj-edit-grid"></div>
+    </div>
+
+    <!-- ── FICHAS PDF ── -->
+    <div class="view" id="view-fichas">
+      <p style="font-size:.82rem;color:var(--s2);margin-bottom:20px">Genera y descarga la ficha de cualquier propiedad publicada.</p>
+      <div class="fichas-grid" id="fichas-grid"></div>
+    </div>
+
+    <!-- ── CONFIG ── -->
+    <div class="view" id="view-config">
+      <div class="config-grid">
+        <div class="config-section">
+          <h3>Datos de contacto</h3>
+          <div class="config-field"><label class="f-label">Teléfono / WhatsApp</label><input class="f-input" id="cfg-tel" placeholder="+52 449..."/></div>
+          <div class="config-field"><label class="f-label">Email</label><input class="f-input" id="cfg-email" placeholder="kaivomx@gmail.com"/></div>
+          <div class="config-field"><label class="f-label">Ciudad</label><input class="f-input" id="cfg-ciudad" placeholder="Aguascalientes, México"/></div>
+          <button class="btn-save" onclick="saveConfig()">Guardar cambios</button>
+        </div>
+        <div class="config-section">
+          <h3>Seguridad</h3>
+          <div class="config-field"><label class="f-label">Nueva contraseña CRM</label><input class="f-input" type="password" id="cfg-pw1" placeholder="Nueva clave..."/></div>
+          <div class="config-field"><label class="f-label">Confirmar contraseña</label><input class="f-input" type="password" id="cfg-pw2" placeholder="Repetir clave..."/></div>
+          <button class="btn-save" onclick="changePw()">Cambiar contraseña</button>
+        </div>
+        <div class="config-section">
+          <h3>Datos del CRM</h3>
+          <p style="font-size:.8rem;color:var(--s2);line-height:1.7;margin-bottom:16px">Exporta todos tus leads a un archivo CSV para usar en Excel o cualquier otro sistema.</p>
+          <button class="btn-save" onclick="exportLeads()">📥 Exportar leads CSV</button>
+        </div>
+        <div class="config-section">
+          <h3>Zona de peligro</h3>
+          <p style="font-size:.8rem;color:var(--s2);line-height:1.7;margin-bottom:16px">Borra todos los datos del CRM. Esta acción no se puede deshacer.</p>
+          <button class="btn-save" style="background:rgba(248,113,113,.15);color:var(--red);border:1px solid rgba(248,113,113,.2)" onclick="clearAll()">🗑 Borrar todos los datos</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- LEAD DETAIL MODAL -->
+<div class="modal-bg" id="lead-modal" onclick="e=>e.target===this&&closeLead()">
+  <div class="modal" id="lead-modal-inner">
+    <div class="modal-head">
+      <div>
+        <h2 id="lm-name">—</h2>
+        <div style="font-size:.75rem;color:var(--accent);margin-top:4px" id="lm-proj"></div>
+      </div>
+      <button class="modal-close" onclick="closeLead()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="detail-grid" id="lm-detail"></div>
+      <label class="f-label" style="margin-bottom:6px;display:block">Estado del lead</label>
+      <select class="status-select" id="lm-status" onchange="updateLeadStatus()">
+        <option value="nuevo">🟡 Nuevo</option>
+        <option value="contactado">🔵 Contactado</option>
+        <option value="interesado">🟣 Interesado</option>
+        <option value="propuesta">🟠 Propuesta enviada</option>
+        <option value="cerrado">🟢 Cerrado ✓</option>
+        <option value="perdido">🔴 Perdido</option>
+      </select>
+      <div class="notes-section">
+        <h4>Notas de seguimiento</h4>
+        <div id="lm-notes"></div>
+        <div class="note-input-wrap">
+          <textarea class="note-input" id="note-input" rows="2" placeholder="Agregar nota..."></textarea>
+          <button class="note-add-btn" onclick="addNote()">Agregar</button>
+        </div>
+      </div>
+      <div class="modal-actions" id="lm-actions"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD LEAD MODAL -->
+<div class="modal-bg" id="add-lead-modal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>Agregar Lead Manual</h2>
+      <button class="modal-close" onclick="document.getElementById('add-lead-modal').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="f-grid">
+        <div><label class="f-label">Nombre *</label><input class="f-input" id="al-nombre" placeholder="Nombre completo"/></div>
+        <div><label class="f-label">Teléfono *</label><input class="f-input" id="al-tel" placeholder="+52 449..."/></div>
+        <div class="f-full"><label class="f-label">Email</label><input class="f-input" id="al-email" placeholder="correo@..."/></div>
+        <div class="f-full"><label class="f-label">Proyecto de interés</label>
+          <select class="f-input" id="al-proj">
+            <option>Beara Paraíso Vertical</option>
+            <option>AUNNA</option>
+            <option>Diana Tower</option>
+            <option>Belanta Campestre</option>
+            <option>Casa o Departamento</option>
+            <option>Terreno Residencial</option>
+            <option>Sin definir</option>
+          </select>
+        </div>
+        <div class="f-full"><label class="f-label">Presupuesto</label><input class="f-input" id="al-budget" placeholder="Desde $3 MDP..."/></div>
+        <button class="btn-save f-full" onclick="saveAddLead()">Agregar Lead →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRINT SHEET -->
+<div id="print-sheet" style="display:none"></div>
+
+<script>
+// ── AUTH ────────────────────────────────────
+const CRM_PW_KEY='kaivo_crm_pw';
+function getCrmPw(){return localStorage.getItem(CRM_PW_KEY)||'kaivo2025';}
+function doLogin(){
+  const pw=document.getElementById('pw-input').value;
+  if(pw===getCrmPw()){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('sidebar').style.display='flex';
+    document.getElementById('main-app').style.display='flex';
+    initCRM();
+  } else {
+    document.getElementById('login-err').style.display='block';
+  }
+}
+document.getElementById('pw-input').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+function doLogout(){
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('sidebar').style.display='none';
+  document.getElementById('main-app').style.display='none';
+  document.getElementById('pw-input').value='';
+}
+
+// ── DATA ─────────────────────────────────────
+function getLeads(){return JSON.parse(localStorage.getItem('kaivo_leads')||'[]');}
+function saveLeads(l){localStorage.setItem('kaivo_leads',JSON.stringify(l));}
+function getProps(){return JSON.parse(localStorage.getItem('kaivo_props')||'[]');}
+function saveProps(p){localStorage.setItem('kaivo_props',JSON.stringify(p));}
+function getProjs(){
+  return JSON.parse(localStorage.getItem('kaivo_projects')||JSON.stringify([
+    {id:'beara',nombre:'Beara Paraíso Vertical',dev:'Terral',precio:'Desde $2,800,000',entrega:'2026',m2:'64–139 m²',deptos:'3 Torres',desc:'Tres torres residenciales con amenidades de resort. Departamentos de 64 a 139 m² con acabados europeos.',url:'https://beara.mx',img:'https://beara.mx/wp-content/uploads/2026/01/vida_maravillosa1.webp'},
+    {id:'aunna',nombre:'AUNNA',dev:'Grupo Paar',precio:'Consultar',entrega:'Por confirmar',m2:'60–128 m²',deptos:'70 Deptos + 41 Locales',desc:'Desarrollo mixto con 70 departamentos y 41 locales comerciales.',url:'https://www.aunna-ags.com',img:'https://www.aunna-ags.com/wp-content/themes/aunna/assets/img/inicio/banner.webp'},
+    {id:'diana',nombre:'Diana Tower',dev:'Grupo ABA',precio:'Consultar',entrega:'Por confirmar',m2:'Por confirmar',deptos:'43 Deptos · 5 Pisos',desc:'43 departamentos en Centro Histórico. Ideal para Airbnb.',url:'https://dianatower.mx',img:'https://dianatower.mx/wp-content/uploads/2025/10/DNT_RND_Area-comun-2-1024x1024.png'},
+    {id:'belanta',nombre:'Belanta Campestre',dev:'GARCAM',precio:'Desde $1,831,790',entrega:'Q4 2026',m2:'180–395 m²',deptos:'200 Lotes',desc:'200 lotes residenciales en fraccionamiento campestre exclusivo.',url:'',img:'https://beara.mx/wp-content/uploads/2025/06/galeria2.webp'}
+  ]));
+}
+function saveProjs(p){localStorage.setItem('kaivo_projects',JSON.stringify(p));}
+function getConfig(){return JSON.parse(localStorage.getItem('kaivo_config')||'{"tel":"+52 449 457 7041","email":"kaivomx@gmail.com","ciudad":"Aguascalientes, México"}');}
+function saveConfig2(c){localStorage.setItem('kaivo_config',JSON.stringify(c));}
+
+// ── INIT ─────────────────────────────────────
+function initCRM(){
+  updateBadge();
+  renderDashboard();
+  renderKanban();
+  renderPropList();
+  renderProjEdit();
+  renderFichas();
+  loadConfig();
+}
+
+// ── NAV ──────────────────────────────────────
+const viewTitles={dashboard:'Dashboard',leads:'Pipeline de Leads',propiedades:'Propiedades',proyectos:'Proyectos en Preventa',fichas:'Fichas PDF',config:'Configuración'};
+function showView(id,el){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('view-'+id).classList.add('active');
+  el.classList.add('active');
+  document.getElementById('topbar-title').textContent=viewTitles[id]||id;
+  if(id==='dashboard') renderDashboard();
+  if(id==='leads') renderKanban();
+  if(id==='propiedades') renderPropList();
+  if(id==='proyectos') renderProjEdit();
+  if(id==='fichas') renderFichas();
+}
+
+// ── BADGE ─────────────────────────────────────
+function updateBadge(){
+  const n=getLeads().filter(l=>l.estado==='nuevo').length;
+  document.getElementById('badge-leads').textContent=n||'';
+  document.getElementById('badge-leads').style.display=n?'inline':'none';
+}
+
+// ── DASHBOARD ─────────────────────────────────
+const ESTADOS=['nuevo','contactado','interesado','propuesta','cerrado','perdido'];
+const ESTADO_LABELS={nuevo:'Nuevos',contactado:'Contactados',interesado:'Interesados',propuesta:'Propuesta',cerrado:'Cerrados',perdido:'Perdidos'};
+const ESTADO_COLORS={nuevo:'#fbbf24',contactado:'#60a5fa',interesado:'#a78bfa',propuesta:'#f97316',cerrado:'#4ade80',perdido:'#f87171'};
+
+function renderDashboard(){
+  const leads=getLeads();
+  const props=getProps();
+  document.getElementById('kpi-total').textContent=leads.length;
+  document.getElementById('kpi-nuevos').textContent=leads.filter(l=>l.estado==='nuevo').length;
+  document.getElementById('kpi-props').textContent=props.length;
+  document.getElementById('kpi-cerrados').textContent=leads.filter(l=>l.estado==='cerrado').length;
+
+  // Actividad reciente
+  const act=document.getElementById('dash-activity');
+  const recent=leads.slice(0,6);
+  if(!recent.length){act.innerHTML='<div class="empty"><div class="e-icon">📭</div><p>Sin leads aún. Los del formulario del sitio aparecerán aquí.</p></div>';return;}
+  act.innerHTML=recent.map(l=>`
+    <div class="activity-item">
+      <div class="act-dot" style="background:${ESTADO_COLORS[l.estado]}"></div>
+      <div><div class="act-text"><strong>${l.nombre}</strong> — ${l.proyecto||'Sin proyecto'}</div>
+      <div class="act-time">${fmtDate(l.fecha)} · ${ESTADO_LABELS[l.estado]}</div></div>
+    </div>`).join('');
+
+  // Pipeline mini
+  const pipe=document.getElementById('dash-pipeline');
+  const max=Math.max(1,...ESTADOS.map(e=>leads.filter(l=>l.estado===e).length));
+  pipe.innerHTML=ESTADOS.map(e=>{
+    const count=leads.filter(l=>l.estado===e).length;
+    const pct=Math.round((count/max)*100);
+    return `<div class="pipe-row">
+      <span class="pipe-label">${ESTADO_LABELS[e]}</span>
+      <div class="pipe-bar-wrap"><div class="pipe-bar" style="width:${pct}%;background:${ESTADO_COLORS[e]}"></div></div>
+      <span class="pipe-count">${count}</span>
+    </div>`;
+  }).join('');
+}
+
+// ── KANBAN ────────────────────────────────────
+let currentLead=null;
+function renderKanban(){
+  const leads=getLeads();
+  const q=document.getElementById('search-leads').value.toLowerCase();
+  const board=document.getElementById('kanban-board');
+  const filtered=q?leads.filter(l=>l.nombre.toLowerCase().includes(q)||l.telefono.includes(q)||(l.email||'').toLowerCase().includes(q)):leads;
+
+  board.innerHTML=ESTADOS.map(estado=>{
+    const cards=filtered.filter(l=>l.estado===estado);
+    return `<div class="kboard">
+      <div class="kboard-head">
+        <span class="kboard-title" style="color:${ESTADO_COLORS[estado]}">${ESTADO_LABELS[estado]}</span>
+        <span class="kboard-count">${cards.length}</span>
+      </div>
+      <div class="kboard-body">
+        ${cards.length?cards.map(l=>`
+          <div class="lead-card" onclick="openLead('${l.id}')">
+            <div class="lc-name">${l.nombre}</div>
+            <div class="lc-proj">${l.proyecto||'Sin proyecto'}</div>
+            <div class="lc-meta">
+              ${l.presupuesto?`<span class="lc-tag">${l.presupuesto}</span>`:''}
+              ${l.notas?.length?`<span class="lc-tag">📝 ${l.notas.length}</span>`:''}
+            </div>
+            <div class="lc-date">${fmtDate(l.fecha)}</div>
+            <div class="lc-actions">
+              <a class="lc-btn wa" href="https://wa.me/${cleanPhone(l.telefono)}?text=Hola%20${encodeURIComponent(l.nombre)}%2C%20te%20contacto%20de%20KAIVO%20Real%20Estate%20🏡" target="_blank" onclick="event.stopPropagation()">WhatsApp</a>
+              <button class="lc-btn view" onclick="event.stopPropagation();openLead('${l.id}')">Ver</button>
+            </div>
+          </div>`).join(''):`<div style="color:var(--s2);font-size:.75rem;padding:16px;text-align:center">Sin leads</div>`}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openLead(id){
+  const leads=getLeads();
+  const l=leads.find(x=>x.id==id);
+  if(!l) return;
+  currentLead=id;
+  document.getElementById('lm-name').textContent=l.nombre;
+  document.getElementById('lm-proj').textContent=l.proyecto||'';
+  document.getElementById('lm-status').value=l.estado;
+  document.getElementById('lm-detail').innerHTML=`
+    <div class="detail-item"><label>Teléfono</label><p>${l.telefono}</p></div>
+    <div class="detail-item"><label>Email</label><p>${l.email||'—'}</p></div>
+    <div class="detail-item"><label>Presupuesto</label><p>${l.presupuesto||'—'}</p></div>
+    <div class="detail-item"><label>Fecha</label><p>${fmtDate(l.fecha)}</p></div>
+    ${l.uso_terreno?`<div class="detail-item"><label>Uso terreno</label><p>${l.uso_terreno}</p></div>`:''}
+    <div class="detail-item"><label>Tipo</label><p>${l.tipo||'—'}</p></div>
+  `;
+  const notes=document.getElementById('lm-notes');
+  notes.innerHTML=l.notas?.length?l.notas.map(n=>`<div class="note-item"><p>${n.texto}</p><span>${fmtDate(n.fecha)}</span></div>`).join(''):'<p style="font-size:.78rem;color:var(--s2);margin-bottom:8px">Sin notas aún.</p>';
+  document.getElementById('lm-actions').innerHTML=`
+    <a class="ma-btn green" href="https://wa.me/${cleanPhone(l.telefono)}?text=Hola%20${encodeURIComponent(l.nombre)}%2C%20te%20contacto%20de%20KAIVO%20Real%20Estate%20🏡" target="_blank">📱 WhatsApp</a>
+    <a class="ma-btn accent" href="tel:${l.telefono}">📞 Llamar</a>
+    <button class="ma-btn red" onclick="deleteLead('${l.id}')">🗑 Eliminar</button>
+  `;
+  document.getElementById('lead-modal').classList.add('open');
+}
+
+function closeLead(){document.getElementById('lead-modal').classList.remove('open');currentLead=null;}
+
+function updateLeadStatus(){
+  if(!currentLead) return;
+  const leads=getLeads();
+  const i=leads.findIndex(l=>l.id==currentLead);
+  if(i>-1){leads[i].estado=document.getElementById('lm-status').value;saveLeads(leads);}
+  renderKanban();updateBadge();
+}
+
+function addNote(){
+  const txt=document.getElementById('note-input').value.trim();
+  if(!txt||!currentLead) return;
+  const leads=getLeads();
+  const i=leads.findIndex(l=>l.id==currentLead);
+  if(i>-1){
+    if(!leads[i].notas) leads[i].notas=[];
+    leads[i].notas.push({texto:txt,fecha:new Date().toISOString()});
+    saveLeads(leads);
+    document.getElementById('note-input').value='';
+    openLead(currentLead);
+    renderKanban();
+  }
+}
+
+function deleteLead(id){
+  if(!confirm('¿Eliminar este lead?')) return;
+  const leads=getLeads().filter(l=>l.id!=id);
+  saveLeads(leads);closeLead();renderKanban();updateBadge();renderDashboard();
+}
+
+function openAddLead(){document.getElementById('add-lead-modal').classList.add('open');}
+function saveAddLead(){
+  const nombre=document.getElementById('al-nombre').value.trim();
+  const tel=document.getElementById('al-tel').value.trim();
+  if(!nombre||!tel){alert('Nombre y teléfono son obligatorios.');return;}
+  const lead={
+    id:Date.now(),nombre,telefono:tel,
+    email:document.getElementById('al-email').value.trim(),
+    proyecto:document.getElementById('al-proj').value,
+    tipo:'manual',presupuesto:document.getElementById('al-budget').value.trim(),
+    estado:'nuevo',fecha:new Date().toISOString(),notas:[],fuente:'manual'
+  };
+  const leads=getLeads();leads.unshift(lead);saveLeads(leads);
+  document.getElementById('add-lead-modal').classList.remove('open');
+  ['al-nombre','al-tel','al-email','al-budget'].forEach(id=>document.getElementById(id).value='');
+  renderKanban();updateBadge();renderDashboard();
+}
+
+// ── PROPIEDADES ───────────────────────────────
+let propPhotos=[];
+function handlePhotos(input){
+  propPhotos=[];
+  document.getElementById('p-thumbs').innerHTML='';
+  Array.from(input.files).forEach(f=>{
+    const r=new FileReader();
+    r.onload=e=>{
+      propPhotos.push(e.target.result);
+      const img=document.createElement('img');
+      img.src=e.target.result;img.className='thumb';
+      document.getElementById('p-thumbs').appendChild(img);
+    };r.readAsDataURL(f);
+  });
+}
+
+function genCopyProp(){
+  const name=document.getElementById('p-name').value.trim();
+  const type=document.getElementById('p-type').value;
+  const loc=document.getElementById('p-loc').value.trim()||'Aguascalientes';
+  const price=document.getElementById('p-price').value.trim();
+  const m2=document.getElementById('p-m2').value.trim();
+  const beds=document.getElementById('p-beds').value;
+  const feats=document.getElementById('p-feats').value.trim();
+  const desc=document.getElementById('p-desc').value.trim();
+  const tl={casa:'casa residencial',depto:'departamento',terreno:'terreno residencial',lote:'lote',oficina:'local'}[type]||type;
+  const openers=[
+    `Pocas propiedades en ${loc} combinan todo lo que ${name||'esta '+tl} ofrece.`,
+    `En un mercado donde escasean las oportunidades reales, ${name||'esta propiedad'} llega a cambiar las reglas.`,
+    `${name||'Esta propiedad'} no es solo un inmueble — es el escenario perfecto para la siguiente etapa de tu vida.`
+  ];
+  let body='';
+  if(m2) body+=`Con ${m2} m²`;
+  if(beds) body+=(body?', ':'')+`${beds} recámaras`;
+  if(body) body+=' — ';
+  if(desc) body+=desc+' ';
+  if(feats) body+=`Cuenta con: ${feats}. `;
+  const closers={
+    casa:`Vivir aquí no es un gasto — es la mejor inversión para tu familia. ${price?'Precio: '+price+'.':''}`,
+    depto:`Los departamentos en ${loc} han crecido en plusvalía consistentemente. Si buscas rentabilidad o tu próximo hogar, esta unidad cumple ambos objetivos.`,
+    terreno:`Un terreno en ${loc} es el lienzo para tu proyecto de vida. Con KAIVO puedes comprarlo y construir a la medida. La tierra no se fabrica.`,
+    lote:`La tierra no se fabrica. Plusvalía garantizada en esta zona. ${price?'Desde '+price+'.':''}`,
+    oficina:`Ubicación estratégica e infraestructura lista. Todo lo que tu negocio necesita para crecer.`
+  };
+  const copy=`${openers[Math.floor(Math.random()*openers.length)]}\n\n${body}\n${closers[type]||closers.casa}\n\nContáctanos — las mejores propiedades no esperan.`;
+  document.getElementById('p-copy').textContent=copy;
+}
+
+function saveProp(){
+  const name=document.getElementById('p-name').value.trim();
+  if(!name){alert('Ingresa el nombre.');return;}
+  const typeVal=document.getElementById('p-type').value;
+  const typeLabels={casa:'Casa',depto:'Departamento',terreno:'Terreno',lote:'Lote',oficina:'Oficina / Local'};
+  const copyText=document.getElementById('p-copy').textContent;
+  const hasCopy=copyText&&!copyText.startsWith('La descripción');
+  const prop={
+    id:Date.now(),name,type:typeVal,typeLabel:typeLabels[typeVal],
+    location:document.getElementById('p-loc').value.trim()||'Aguascalientes',
+    price:document.getElementById('p-price').value.trim()||'Consultar',
+    m2:document.getElementById('p-m2').value.trim(),
+    beds:document.getElementById('p-beds').value,
+    baths:document.getElementById('p-baths').value,
+    feats:document.getElementById('p-feats').value.trim(),
+    desc:document.getElementById('p-desc').value.trim(),
+    copyDesc:hasCopy?copyText:'',photos:[...propPhotos]
+  };
+  const props=getProps();props.unshift(prop);saveProps(props);
+  ['p-name','p-loc','p-price','p-m2','p-beds','p-baths','p-feats','p-desc'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('p-thumbs').innerHTML='';
+  document.getElementById('p-copy').textContent='La descripción generada aparecerá aquí.';
+  propPhotos=[];
+  renderPropList();renderFichas();
+  alert(`✅ "${name}" publicada en el sitio.`);
+}
+
+function renderPropList(){
+  const props=getProps();
+  document.getElementById('prop-count').textContent=props.length;
+  const list=document.getElementById('prop-list');
+  if(!props.length){list.innerHTML='<div class="empty"><div class="e-icon">🏡</div><p>Sin propiedades aún.</p></div>';return;}
+  list.innerHTML=props.map((p,i)=>`
+    <div class="list-item">
+      ${p.photos[0]?`<img src="${p.photos[0]}" alt="${p.name}"/>`:`<div class="list-img-ph">🏡</div>`}
+      <div class="list-info"><strong>${p.name}</strong><span>${p.typeLabel} · ${p.location} · ${p.price}</span></div>
+      <div class="list-actions">
+        <button class="icon-btn del" onclick="deleteProp(${i})" title="Eliminar">🗑</button>
+      </div>
+    </div>`).join('');
+}
+
+function deleteProp(i){
+  const props=getProps();
+  if(!confirm(`¿Eliminar "${props[i].name}"?`)) return;
+  props.splice(i,1);saveProps(props);renderPropList();renderFichas();
+}
+
+// ── PROYECTOS PREVENTA ────────────────────────
+function renderProjEdit(){
+  const projs=getProjs();
+  document.getElementById('proj-edit-grid').innerHTML=projs.map((p,i)=>`
+    <div class="proj-edit-card">
+      <div class="proj-name-tag">${p.nombre}</div>
+      <div class="f-grid">
+        <div><label class="f-label">Nombre</label><input class="f-input" id="pr-${i}-nombre" value="${p.nombre}"/></div>
+        <div><label class="f-label">Desarrollador</label><input class="f-input" id="pr-${i}-dev" value="${p.dev}"/></div>
+        <div><label class="f-label">Precio</label><input class="f-input" id="pr-${i}-precio" value="${p.precio}"/></div>
+        <div><label class="f-label">Entrega</label><input class="f-input" id="pr-${i}-entrega" value="${p.entrega}"/></div>
+        <div><label class="f-label">Superficies</label><input class="f-input" id="pr-${i}-m2" value="${p.m2}"/></div>
+        <div><label class="f-label">Unidades</label><input class="f-input" id="pr-${i}-deptos" value="${p.deptos}"/></div>
+        <div class="f-full"><label class="f-label">Descripción</label><textarea class="f-input f-textarea" id="pr-${i}-desc">${p.desc}</textarea></div>
+        <div class="f-full"><label class="f-label">URL del proyecto</label><input class="f-input" id="pr-${i}-url" value="${p.url}"/></div>
+        <button class="btn-save f-full" onclick="saveProj(${i})">Guardar cambios →</button>
+      </div>
+    </div>`).join('');
+}
+
+function saveProj(i){
+  const projs=getProjs();
+  projs[i]={...projs[i],
+    nombre:document.getElementById(`pr-${i}-nombre`).value,
+    dev:document.getElementById(`pr-${i}-dev`).value,
+    precio:document.getElementById(`pr-${i}-precio`).value,
+    entrega:document.getElementById(`pr-${i}-entrega`).value,
+    m2:document.getElementById(`pr-${i}-m2`).value,
+    deptos:document.getElementById(`pr-${i}-deptos`).value,
+    desc:document.getElementById(`pr-${i}-desc`).value,
+    url:document.getElementById(`pr-${i}-url`).value,
+  };
+  saveProjs(projs);
+  alert('✅ Proyecto actualizado.');
+}
+
+// ── FICHAS ────────────────────────────────────
+function renderFichas(){
+  const props=getProps();
+  const grid=document.getElementById('fichas-grid');
+  if(!props.length){grid.innerHTML='<div class="empty" style="grid-column:1/-1"><div class="e-icon">📄</div><p>Sube propiedades para generar fichas.</p></div>';return;}
+  grid.innerHTML=props.map((p,i)=>`
+    <div class="ficha-card">
+      <div class="ficha-img">${p.photos[0]?`<img src="${p.photos[0]}" alt="${p.name}"/>`:'🏡'}</div>
+      <div class="ficha-body">
+        <h3>${p.name}</h3>
+        <p>${p.typeLabel} · ${p.location} · ${p.price}</p>
+        <div class="ficha-btns">
+          <button class="ficha-btn prim" onclick="printFicha(${i},true)">Con logo</button>
+          <button class="ficha-btn sec" onclick="printFicha(${i},false)">Sin logo</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function printFicha(i,withLogo){
+  const p=getProps()[i];
+  const sheet=document.getElementById('print-sheet');
+  sheet.style.display='block';
+  const photos=p.photos.slice(0,4).map(s=>`<img src="${s}"/>`).join('');
+  sheet.innerHTML=`
+    ${withLogo?`<div class="pk">KAIVO</div><span class="pre">Real Estate · Aguascalientes, México</span>`:''}
+    <h1 class="pt">${p.name}</h1>
+    <p class="pp">${p.price}</p>
+    <div class="ps">
+      ${p.m2?`<div><strong>${p.m2} m²</strong><span>Superficie</span></div>`:''}
+      ${p.beds?`<div><strong>${p.beds}</strong><span>Recámaras</span></div>`:''}
+      ${p.baths?`<div><strong>${p.baths}</strong><span>Baños</span></div>`:''}
+      <div><strong>${p.location}</strong><span>Ubicación</span></div>
+    </div>
+    ${photos?`<div class="ph">${photos}</div>`:''}
+    <p class="pd">${p.copyDesc||p.desc}</p>
+    ${withLogo?`<p class="pf">KAIVO REAL ESTATE · kaivomx@gmail.com · +52 449 457 7041</p>`:''}
+  `;
+  setTimeout(()=>{window.print();setTimeout(()=>{sheet.style.display='none';},400);},100);
+}
+
+// ── CONFIG ────────────────────────────────────
+function loadConfig(){
+  const c=getConfig();
+  document.getElementById('cfg-tel').value=c.tel||'';
+  document.getElementById('cfg-email').value=c.email||'';
+  document.getElementById('cfg-ciudad').value=c.ciudad||'';
+}
+function saveConfig(){
+  const c={tel:document.getElementById('cfg-tel').value,email:document.getElementById('cfg-email').value,ciudad:document.getElementById('cfg-ciudad').value};
+  saveConfig2(c);alert('✅ Configuración guardada.');
+}
+function changePw(){
+  const p1=document.getElementById('cfg-pw1').value;
+  const p2=document.getElementById('cfg-pw2').value;
+  if(!p1){alert('Ingresa la nueva contraseña.');return;}
+  if(p1!==p2){alert('Las contraseñas no coinciden.');return;}
+  localStorage.setItem(CRM_PW_KEY,p1);
+  document.getElementById('cfg-pw1').value='';
+  document.getElementById('cfg-pw2').value='';
+  alert('✅ Contraseña actualizada.');
+}
+function exportLeads(){
+  const leads=getLeads();
+  if(!leads.length){alert('Sin leads para exportar.');return;}
+  const header='Nombre,Teléfono,Email,Proyecto,Presupuesto,Estado,Fecha\n';
+  const rows=leads.map(l=>`"${l.nombre}","${l.telefono}","${l.email||''}","${l.proyecto||''}","${l.presupuesto||''}","${l.estado}","${fmtDate(l.fecha)}"`).join('\n');
+  const blob=new Blob([header+rows],{type:'text/csv'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='kaivo-leads.csv';a.click();
+}
+function clearAll(){
+  if(!confirm('¿Borrar TODOS los datos? Esta acción no se puede deshacer.')) return;
+  ['kaivo_leads','kaivo_props','kaivo_projects'].forEach(k=>localStorage.removeItem(k));
+  alert('Datos borrados.');initCRM();
+}
+
+// ── UTILS ─────────────────────────────────────
+function fmtDate(iso){
+  if(!iso) return '—';
+  const d=new Date(iso);
+  return d.toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'});
+}
+function cleanPhone(tel){return(tel||'').replace(/\D/g,'');}
+</script>
+</body>
+</html>
