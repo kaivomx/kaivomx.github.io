@@ -684,7 +684,11 @@ function openLead(id){
     ${l.uso_terreno?`<div class="detail-row"><label>Uso terreno</label><p>${l.uso_terreno}</p></div>`:''}
   `;
   const notes=document.getElementById('lm-notes');
-  notes.innerHTML=l.notas?.length?l.notas.map(n=>`<div class="note-item"><p>${n.texto}</p><span>${fmtDate(n.fecha)}</span></div>`).join(''):'<p style="font-size:.78rem;color:var(--s2);margin-bottom:8px">Sin notas.</p>';
+  notes.innerHTML=l.notas?.length?l.notas.map((n,ni)=>`
+    <div class="note-item" style="display:flex;gap:8px;align-items:flex-start">
+      <div style="flex:1"><p>${n.texto}</p><span>${fmtDate(n.fecha)}</span></div>
+      <button onclick="deleteNote('${l.id}',${ni})" style="background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.2);color:var(--red);border-radius:6px;padding:4px 8px;font-size:.7rem;flex-shrink:0">✕</button>
+    </div>`).join(''):'<p style="font-size:.78rem;color:var(--s2);margin-bottom:8px">Sin notas.</p>';
   document.getElementById('lm-actions').innerHTML=`
     <a class="ma-btn green" href="https://wa.me/${cleanPhone(l.telefono)}?text=Hola%20${encodeURIComponent(l.nombre)}%2C%20te%20contacto%20de%20KAIVO%20Real%20Estate%20🏡" target="_blank">📱 WhatsApp</a>
     <a class="ma-btn blue" href="tel:${l.telefono}">📞 Llamar</a>
@@ -716,6 +720,14 @@ function addNote(){
     openLead(currentLeadId);
     renderLeads();
   }
+}
+
+function deleteNote(leadId,noteIdx){
+  if(!confirm('¿Eliminar esta nota?')) return;
+  const leads=getLeads();
+  const i=leads.findIndex(l=>l.id==leadId);
+  if(i>-1){leads[i].notas.splice(noteIdx,1);saveLeads(leads);}
+  openLead(leadId);
 }
 
 function deleteLead(id){
