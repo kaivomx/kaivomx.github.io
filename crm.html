@@ -128,11 +128,12 @@ input,select,textarea{font-family:'Inter',sans-serif;color:var(--w)}
 .photo-drop p{color:var(--s2);font-size:.82rem}
 .photo-drop strong{color:var(--accent)}
 .thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-.thumb-wrap{position:relative;cursor:grab;user-select:none}
-.thumb-wrap.dragging{opacity:.4}
-.thumb-wrap .thumb-del{position:absolute;top:-5px;right:-5px;background:var(--red);border:none;color:#fff;border-radius:50%;width:18px;height:18px;font-size:.6rem;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;z-index:2}
+.thumb-wrap{position:relative;user-select:none;flex-shrink:0}
+.thumb-wrap .thumb-del{position:absolute;top:-5px;right:-5px;background:var(--red);border:none;color:#fff;border-radius:50%;width:20px;height:20px;font-size:.7rem;cursor:pointer;z-index:2;display:flex;align-items:center;justify-content:center;padding:0}
 .thumb-wrap .thumb-badge{position:absolute;bottom:2px;left:2px;background:var(--accent);color:var(--bg);font-size:.55rem;padding:1px 4px;border-radius:3px;font-weight:700}
-.thumb{width:80px;height:64px;object-fit:cover;border-radius:8px;border:1px solid var(--b);display:block}
+.thumb-wrap .thumb-arrows{position:absolute;bottom:2px;right:2px;display:flex;gap:2px}
+.thumb-wrap .thumb-arrows button{background:rgba(0,0,0,.7);border:none;color:#fff;border-radius:3px;width:18px;height:18px;font-size:.65rem;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center}
+.thumb{width:88px;height:70px;object-fit:cover;border-radius:8px;border:1px solid var(--b);display:block}
 .copy-box{background:var(--b2);border:1px solid var(--b);border-radius:10px;padding:12px;font-size:.78rem;color:var(--w2);line-height:1.8;white-space:pre-wrap;margin-bottom:10px;min-height:60px}
 .btn-gen{background:rgba(201,184,154,.1);border:1px solid rgba(201,184,154,.2);color:var(--accent);padding:10px 16px;border-radius:8px;font-size:.72rem;letter-spacing:1.5px;text-transform:uppercase;width:100%;margin-bottom:10px}
 .btn-primary{background:var(--accent);color:var(--bg);padding:14px;border-radius:12px;font-size:.8rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;width:100%;transition:all .3s}
@@ -777,59 +778,48 @@ function saveAddLead(){
 // ── PROPIEDADES ────────────────────────────────
 let propPhotos=[];
 function handlePhotos(input){
-  Array.from(input.files).forEach(f=>{
-    const r=new FileReader();
-    r.onload=e=>{ propPhotos.push(e.target.result); renderThumbs(); };
+  Array.from(input.files).forEach(function(f){
+    var r=new FileReader();
+    r.onload=function(e){ propPhotos.push(e.target.result); renderThumbs(); };
     r.readAsDataURL(f);
   });
 }
 
-function renderThumbs(){
-  const c=document.getElementById('p-thumbs');
-  c.innerHTML='';
-  propPhotos.forEach((src,i)=>{
-    const wrap=document.createElement('div');
-    wrap.className='thumb-wrap';
-    wrap.draggable=true;
-    wrap.dataset.i=i;
-    wrap.innerHTML=`<img src="${src}" class="thumb"/><button class="thumb-del" onclick="removeThumb(${i})">✕</button>${i===0?'<span class="thumb-badge">FACHADA</span>':''}`;
-    wrap.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',i);wrap.classList.add('dragging');});
-    wrap.addEventListener('dragend',()=>wrap.classList.remove('dragging'));
-    wrap.addEventListener('dragover',e=>{e.preventDefault();});
-    wrap.addEventListener('drop',e=>{
-      e.preventDefault();
-      const from=parseInt(e.dataTransfer.getData('text/plain'));
-      const to=i;
-      if(from===to) return;
-      const moved=propPhotos.splice(from,1)[0];
-      propPhotos.splice(to,0,moved);
-      renderThumbs();
-    });
-    // touch drag for mobile
-    let touchStartIdx=null;
-    wrap.addEventListener('touchstart',()=>{touchStartIdx=i;},{ passive:true });
-    wrap.addEventListener('touchend',e=>{
-      const t=e.changedTouches[0];
-      const el=document.elementFromPoint(t.clientX,t.clientY);
-      const target=el?.closest('.thumb-wrap');
-      if(target&&touchStartIdx!==null){
-        const to=parseInt(target.dataset.i);
-        if(touchStartIdx!==to){
-          const moved=propPhotos.splice(touchStartIdx,1)[0];
-          propPhotos.splice(to,0,moved);
-          renderThumbs();
-        }
-      }
-      touchStartIdx=null;
-    },{ passive:true });
-    c.appendChild(wrap);
-  });
-  if(propPhotos.length) c.insertAdjacentHTML('beforeend','<p style="font-size:.72rem;color:var(--s2);width:100%;margin:4px 0 0">Arrastra para ordenar · Primera foto = fachada</p>');
+function moveThumb(i,dir){
+  var j=i+dir;
+  if(j<0||j>=propPhotos.length) return;
+  var tmp=propPhotos[i]; propPhotos[i]=propPhotos[j]; propPhotos[j]=tmp;
+  renderThumbs();
 }
 
 function removeThumb(i){
   propPhotos.splice(i,1);
   renderThumbs();
+}
+
+function renderThumbs(){
+  var c=document.getElementById('p-thumbs');
+  c.innerHTML='';
+  for(var i=0;i<propPhotos.length;i++){
+    (function(idx){
+      var wrap=document.createElement('div');
+      wrap.className='thumb-wrap';
+      wrap.innerHTML='<img src="'+propPhotos[idx]+'" class="thumb"/>'
+        +'<button class="thumb-del" onclick="removeThumb('+idx+')">✕</button>'
+        +(idx===0?'<span class="thumb-badge">FACHADA</span>':'')
+        +'<div class="thumb-arrows">'
+        +(idx>0?'<button onclick="moveThumb('+idx+',-1)">←</button>':'')
+        +(idx<propPhotos.length-1?'<button onclick="moveThumb('+idx+',1)">→</button>':'')
+        +'</div>';
+      c.appendChild(wrap);
+    })(i);
+  }
+  if(propPhotos.length){
+    var hint=document.createElement('p');
+    hint.style.cssText='font-size:.72rem;color:var(--s2);width:100%;margin:6px 0 0';
+    hint.textContent='Usa ← → para ordenar · Primera foto = FACHADA';
+    c.appendChild(hint);
+  }
 }
 
 function genCopy(){
