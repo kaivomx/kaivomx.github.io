@@ -128,7 +128,11 @@ input,select,textarea{font-family:'Inter',sans-serif;color:var(--w)}
 .photo-drop p{color:var(--s2);font-size:.82rem}
 .photo-drop strong{color:var(--accent)}
 .thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-.thumb{width:72px;height:56px;object-fit:cover;border-radius:8px;border:1px solid var(--b)}
+.thumb-wrap{position:relative;cursor:grab;user-select:none}
+.thumb-wrap.dragging{opacity:.4}
+.thumb-wrap .thumb-del{position:absolute;top:-5px;right:-5px;background:var(--red);border:none;color:#fff;border-radius:50%;width:18px;height:18px;font-size:.6rem;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;z-index:2}
+.thumb-wrap .thumb-badge{position:absolute;bottom:2px;left:2px;background:var(--accent);color:var(--bg);font-size:.55rem;padding:1px 4px;border-radius:3px;font-weight:700}
+.thumb{width:80px;height:64px;object-fit:cover;border-radius:8px;border:1px solid var(--b);display:block}
 .copy-box{background:var(--b2);border:1px solid var(--b);border-radius:10px;padding:12px;font-size:.78rem;color:var(--w2);line-height:1.8;white-space:pre-wrap;margin-bottom:10px;min-height:60px}
 .btn-gen{background:rgba(201,184,154,.1);border:1px solid rgba(201,184,154,.2);color:var(--accent);padding:10px 16px;border-radius:8px;font-size:.72rem;letter-spacing:1.5px;text-transform:uppercase;width:100%;margin-bottom:10px}
 .btn-primary{background:var(--accent);color:var(--bg);padding:14px;border-radius:12px;font-size:.8rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;width:100%;transition:all .3s}
@@ -773,17 +777,59 @@ function saveAddLead(){
 // ── PROPIEDADES ────────────────────────────────
 let propPhotos=[];
 function handlePhotos(input){
-  propPhotos=[];
-  document.getElementById('p-thumbs').innerHTML='';
   Array.from(input.files).forEach(f=>{
     const r=new FileReader();
-    r.onload=e=>{
-      propPhotos.push(e.target.result);
-      const img=document.createElement('img');
-      img.src=e.target.result;img.className='thumb';
-      document.getElementById('p-thumbs').appendChild(img);
-    };r.readAsDataURL(f);
+    r.onload=e=>{ propPhotos.push(e.target.result); renderThumbs(); };
+    r.readAsDataURL(f);
   });
+}
+
+function renderThumbs(){
+  const c=document.getElementById('p-thumbs');
+  c.innerHTML='';
+  propPhotos.forEach((src,i)=>{
+    const wrap=document.createElement('div');
+    wrap.className='thumb-wrap';
+    wrap.draggable=true;
+    wrap.dataset.i=i;
+    wrap.innerHTML=`<img src="${src}" class="thumb"/><button class="thumb-del" onclick="removeThumb(${i})">✕</button>${i===0?'<span class="thumb-badge">FACHADA</span>':''}`;
+    wrap.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',i);wrap.classList.add('dragging');});
+    wrap.addEventListener('dragend',()=>wrap.classList.remove('dragging'));
+    wrap.addEventListener('dragover',e=>{e.preventDefault();});
+    wrap.addEventListener('drop',e=>{
+      e.preventDefault();
+      const from=parseInt(e.dataTransfer.getData('text/plain'));
+      const to=i;
+      if(from===to) return;
+      const moved=propPhotos.splice(from,1)[0];
+      propPhotos.splice(to,0,moved);
+      renderThumbs();
+    });
+    // touch drag for mobile
+    let touchStartIdx=null;
+    wrap.addEventListener('touchstart',()=>{touchStartIdx=i;},{ passive:true });
+    wrap.addEventListener('touchend',e=>{
+      const t=e.changedTouches[0];
+      const el=document.elementFromPoint(t.clientX,t.clientY);
+      const target=el?.closest('.thumb-wrap');
+      if(target&&touchStartIdx!==null){
+        const to=parseInt(target.dataset.i);
+        if(touchStartIdx!==to){
+          const moved=propPhotos.splice(touchStartIdx,1)[0];
+          propPhotos.splice(to,0,moved);
+          renderThumbs();
+        }
+      }
+      touchStartIdx=null;
+    },{ passive:true });
+    c.appendChild(wrap);
+  });
+  if(propPhotos.length) c.insertAdjacentHTML('beforeend','<p style="font-size:.72rem;color:var(--s2);width:100%;margin:4px 0 0">Arrastra para ordenar · Primera foto = fachada</p>');
+}
+
+function removeThumb(i){
+  propPhotos.splice(i,1);
+  renderThumbs();
 }
 
 function genCopy(){
@@ -791,30 +837,48 @@ function genCopy(){
   const type=document.getElementById('p-type').value;
   const loc=document.getElementById('p-loc').value.trim()||'Aguascalientes';
   const price=document.getElementById('p-price').value.trim();
-  const m2=document.getElementById('p-m2').value.trim();
+  const m2t=document.getElementById('p-m2t').value.trim();
+  const m2c=document.getElementById('p-m2c').value.trim();
   const beds=document.getElementById('p-beds').value;
+  const baths=document.getElementById('p-baths').value;
   const feats=document.getElementById('p-feats').value.trim();
   const desc=document.getElementById('p-desc').value.trim();
+
+  const tipoLabel={casa:'casa',depto:'departamento',terreno:'terreno',lote:'lote',oficina:'oficina'}[type]||'propiedad';
+  const prop=name||`este ${tipoLabel}`;
+
   const openers=[
-    `Pocas propiedades en ${loc} combinan todo lo que ${name||'esta propiedad'} ofrece.`,
-    `En un mercado donde escasean las oportunidades reales, ${name||'esta propiedad'} llega a cambiar las reglas.`,
-    `${name||'Esta propiedad'} no es solo un inmueble — es el escenario perfecto para la siguiente etapa de tu vida.`
+    `Hay propiedades que se encuentran, y hay propiedades que se eligen. ${prop} es de las segundas.`,
+    `No todas las oportunidades vuelven a aparecer. Esta es una de ellas.`,
+    `Si estás buscando ${tipoLabel} en ${loc}, esto es lo que el mercado tiene de mejor.`,
+    `${prop} reúne todo lo que buscas — y algo que aún no sabías que necesitabas.`
   ];
-  let body='';
-  if(m2) body+=`Con ${m2} m²`;
-  if(beds) body+=(body?', ':'')+`${beds} recámaras`;
-  if(body) body+=' — ';
-  if(desc) body+=desc+' ';
-  if(feats) body+=`Cuenta con: ${feats}. `;
-  const closers={
-    casa:`Vivir aquí no es un gasto — es la mejor inversión para tu familia. ${price?'Precio: '+price+'.':''}`,
-    depto:`Los departamentos en ${loc} han crecido en plusvalía consistentemente. ${price?'Desde '+price+'.':''}`,
-    terreno:`Un terreno en ${loc} es el lienzo para tu proyecto de vida. Con KAIVO puedes comprarlo y construir a la medida.`,
-    lote:`La tierra no se fabrica. Plusvalía garantizada. ${price?'Desde '+price+'.':''}`,
-    oficina:`Ubicación estratégica e infraestructura lista. Todo lo que tu negocio necesita para crecer.`
+
+  let especificaciones='';
+  const specs=[];
+  if(m2t) specs.push(`${m2t} m² de terreno`);
+  if(m2c) specs.push(`${m2c} m² de construcción`);
+  if(beds) specs.push(`${beds} recámara${beds>1?'s':''}`);
+  if(baths) specs.push(`${baths} baño${baths>1?'s':''}`);
+  if(specs.length) especificaciones=specs.join(' · ')+'.';
+
+  let cuerpo='';
+  if(desc) cuerpo+=desc+'\n\n';
+  if(especificaciones) cuerpo+=especificaciones+'\n';
+  if(feats) cuerpo+=`Amenidades: ${feats}.\n`;
+
+  const cierres={
+    casa:`Invertir en esta casa en ${loc} no es un gasto — es construir el patrimonio de tu familia con la solidez de una ubicación que solo crece en valor.${price?'\n\nPrecio: '+price+'.':''}`,
+    depto:`${loc} es uno de los mercados con mayor plusvalía del Bajío. Este departamento es tu punto de entrada.${price?'\n\nPrecio: '+price+'.':''}`,
+    terreno:`Un terreno en ${loc} es el lienzo en blanco para construir exactamente lo que imaginas. Con KAIVO te acompañamos en cada paso.${price?'\n\nPrecio: '+price+'.':''}`,
+    lote:`La tierra no se fabrica. Cada año que pasa sin este lote es plusvalía que alguien más está ganando.${price?'\n\nDesde '+price+'.':''}`,
+    oficina:`Tu negocio merece una ubicación que lo proyecte. Esta oficina en ${loc} tiene todo para que tu empresa crezca.${price?'\n\nPrecio: '+price+'.':''}`
   };
+
+  const opener=openers[Math.floor(Math.random()*openers.length)];
+  const cierre=cierres[type]||cierres.casa;
   const box=document.getElementById('p-copy');
-  box.textContent=`${openers[Math.floor(Math.random()*openers.length)]}\n\n${body}\n${closers[type]||closers.casa}\n\nContáctanos — las mejores propiedades no esperan.`;
+  box.textContent=`${opener}\n\n${cuerpo}\n${cierre}\n\n📲 Contáctanos hoy — las mejores propiedades no esperan.`;
   box.style.display='block';
 }
 
