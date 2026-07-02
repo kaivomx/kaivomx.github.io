@@ -563,80 +563,7 @@ footer{background:var(--s);border-top:1px solid var(--b);padding:64px 5% 32px}
     </div>
     <p class="r" style="color:var(--s2);max-width:300px;font-size:.82rem;line-height:1.85">Proyectos seleccionados por su solidez, ubicación y potencial de retorno. Todos verificados.</p>
   </div>
-  <div class="proj-grid">
-    <div class="proj-card r" onclick="openProj('beara')">
-      <div class="proj-img">
-        <img src="https://beara.mx/wp-content/uploads/2026/01/vida_maravillosa1.webp" alt="Beara Paraíso Vertical" loading="lazy"/>
-        <div class="proj-badge">Entrega 2026</div>
-      </div>
-      <div class="proj-body">
-        <p class="proj-dev">Terral · 30+ años de experiencia</p>
-        <h3>Beara Paraíso Vertical</h3>
-        <p class="proj-desc">Tres torres residenciales con amenidades de resort en el corazón de Aguascalientes. Departamentos de 64 a 139 m² con acabados europeos.</p>
-        <div class="proj-specs">
-          <span class="proj-spec">🏢 3 Torres</span>
-          <span class="proj-spec">📐 64–139 m²</span>
-          <span class="proj-spec">🌊 Alberca · Gym</span>
-        </div>
-        <p class="proj-price">Desde $2.8 MDP</p>
-        <button class="proj-cta">Ver proyecto completo →</button>
-      </div>
-    </div>
-    <div class="proj-card r d1" onclick="openProj('aunna')">
-      <div class="proj-img">
-        <img src="https://www.aunna-ags.com/wp-content/themes/aunna/assets/img/inicio/banner.webp" alt="AUNNA" loading="lazy"/>
-        <div class="proj-badge">Preventa Activa</div>
-      </div>
-      <div class="proj-body">
-        <p class="proj-dev">Grupo Paar · Desarrollo Mixto</p>
-        <h3>AUNNA</h3>
-        <p class="proj-desc">70 departamentos y 41 locales comerciales. Ideal para renta de largo plazo o negocio propio con dos flujos de ingreso.</p>
-        <div class="proj-specs">
-          <span class="proj-spec">🏠 70 Deptos</span>
-          <span class="proj-spec">🏪 41 Locales</span>
-          <span class="proj-spec">📐 60–128 m²</span>
-        </div>
-        <p class="proj-price">Consultar precio</p>
-        <button class="proj-cta">Ver proyecto completo →</button>
-      </div>
-    </div>
-    <div class="proj-card r d2" onclick="openProj('diana')">
-      <div class="proj-img">
-        <img src="https://dianatower.mx/wp-content/uploads/2025/10/DNT_RND_Area-comun-2-1024x1024.png" alt="Diana Tower" loading="lazy"/>
-        <div class="proj-badge">Centro Histórico</div>
-      </div>
-      <div class="proj-body">
-        <p class="proj-dev">Grupo ABA · Proyecto Boutique</p>
-        <h3>Diana Tower</h3>
-        <p class="proj-desc">43 departamentos en 5 pisos en el Centro Histórico. Perfecto para Airbnb con retorno acelerado y diseño sin competencia.</p>
-        <div class="proj-specs">
-          <span class="proj-spec">🏙️ 43 Deptos</span>
-          <span class="proj-spec">📍 Centro Histórico</span>
-          <span class="proj-spec">🌐 Airbnb-Ready</span>
-        </div>
-        <p class="proj-price">Consultar precio</p>
-        <button class="proj-cta">Ver proyecto completo →</button>
-      </div>
-    </div>
-    <div class="proj-card r d3" onclick="openProj('belanta')">
-      <div class="proj-img">
-        <img src="https://beara.mx/wp-content/uploads/2025/06/galeria2.webp" alt="Belanta Campestre" loading="lazy"/>
-        <div class="proj-badge">Entrega Q4 2026</div>
-      </div>
-      <div class="proj-body">
-        <p class="proj-dev">GARCAM · 17 años en el mercado</p>
-        <h3>Belanta Campestre</h3>
-        <p class="proj-desc">200 lotes residenciales en fraccionamiento campestre exclusivo. Superficies de 180 a 395 m² con escrituras limpias y financiamiento accesible.</p>
-        <div class="proj-specs">
-          <span class="proj-spec">🌿 200 Lotes</span>
-          <span class="proj-spec">📐 180–395 m²</span>
-          <span class="proj-spec">🏆 Exclusivo</span>
-        </div>
-        <p class="proj-price">Desde $1,831,790</p>
-        <button class="proj-cta">Ver proyecto completo →</button>
-      </div>
-    </div>
-  </div>
+  <div class="proj-grid" id="proj-grid"></div>
 </section>
 
 <!-- RESIDENCIAL -->
@@ -1146,12 +1073,44 @@ function closeAllModals(){
 document.addEventListener('keydown',e=>{if(e.key==='Escape') closeAllModals();});
 
 // ── STORAGE ───────────────────────────────
-let properties=JSON.parse(localStorage.getItem('kaivo_props')||'[]');
 let photosB64=[];
-function saveProps(){localStorage.setItem('kaivo_props',JSON.stringify(properties));}
+function getProps(){return JSON.parse(localStorage.getItem('kaivo_props')||'[]');}
+function getProjs(){
+  return JSON.parse(localStorage.getItem('kaivo_projects')||JSON.stringify([
+    {id:'beara',nombre:'Beara Paraíso Vertical',dev:'Terral · 30+ años',precio:'Desde $2,800,000',entrega:'2026',m2:'64–139 m²',deptos:'3 Torres',desc:'Tres torres residenciales con amenidades de resort en el corazón de Aguascalientes. Departamentos de 64 a 139 m² con acabados europeos.',foto:'https://beara.mx/wp-content/uploads/2026/01/vida_maravillosa1.webp'},
+    {id:'aunna',nombre:'AUNNA',dev:'Grupo Paar · Desarrollo Mixto',precio:'Consultar precio',entrega:'Por confirmar',m2:'60–128 m²',deptos:'70 Deptos + 41 Locales',desc:'70 departamentos y 41 locales comerciales. Ideal para renta de largo plazo o negocio propio con dos flujos de ingreso.',foto:'https://www.aunna-ags.com/wp-content/themes/aunna/assets/img/inicio/banner.webp'},
+    {id:'diana',nombre:'Diana Tower',dev:'Grupo ABA · Proyecto Boutique',precio:'Consultar precio',entrega:'Por confirmar',m2:'Por confirmar',deptos:'43 Deptos · 5 Pisos',desc:'43 departamentos en 5 pisos en el Centro Histórico. Perfecto para Airbnb con retorno acelerado y diseño sin competencia.',foto:'https://dianatower.mx/wp-content/uploads/2025/10/DNT_RND_Area-comun-2-1024x1024.png'},
+    {id:'belanta',nombre:'Belanta Campestre',dev:'GARCAM · 17 años en el mercado',precio:'Desde $1,831,790',entrega:'Q4 2026',m2:'180–395 m²',deptos:'200 Lotes',desc:'200 lotes residenciales en fraccionamiento campestre exclusivo. Superficies de 180 a 395 m² con escrituras limpias y financiamiento accesible.',foto:'https://beara.mx/wp-content/uploads/2025/06/galeria2.webp'}
+  ]));
+}
+
+// ── RENDER PROJECTS ───────────────────────
+function renderProjects(){
+  const projs=getProjs();
+  const grid=document.getElementById('proj-grid');
+  grid.innerHTML=projs.map((p,j)=>`
+    <div class="proj-card r${j>0?' d'+j:''}" onclick="openProjModal(${j})">
+      <div class="proj-img">
+        ${p.foto?`<img src="${p.foto}" alt="${p.nombre}" loading="lazy"/>`:'<div style="width:100%;height:100%;background:var(--s);display:flex;align-items:center;justify-content:center;font-size:2rem">🏗️</div>'}
+        <div class="proj-badge">${p.entrega||'Preventa'}</div>
+      </div>
+      <div class="proj-body">
+        <p class="proj-dev">${p.dev||''}</p>
+        <h3>${p.nombre}</h3>
+        <p class="proj-desc">${p.desc||''}</p>
+        <div class="proj-specs">
+          ${p.deptos?`<span class="proj-spec">🏢 ${p.deptos}</span>`:''}
+          ${p.m2?`<span class="proj-spec">📐 ${p.m2}</span>`:''}
+        </div>
+        <p class="proj-price">${p.precio||'Consultar'}</p>
+        <button class="proj-cta">Ver proyecto completo →</button>
+      </div>
+    </div>`).join('');
+}
 
 // ── RENDER PROPERTY GRID ──────────────────
 function renderGrid(){
+  const properties=getProps().filter(p=>p.status!=='vendida');
   const grid=document.getElementById('prop-grid');
   if(!properties.length){
     grid.innerHTML='<div class="empty-state"><p>Próximamente propiedades disponibles.</p><small>¿Tienes una propiedad? <a href="#contacto" style="color:var(--accent)">Contáctanos.</a></small></div>';
@@ -1160,14 +1119,15 @@ function renderGrid(){
   grid.innerHTML=properties.map((p,i)=>`
     <div class="prop-card" onclick="openPropModal(${i})">
       <div class="prop-img">
-        <img src="${p.photos[0]||''}" alt="${p.name}" loading="lazy"/>
-        <span class="prop-tag">${p.typeLabel}</span>
+        ${p.photos&&p.photos[0]?`<img src="${p.photos[0]}" alt="${p.name}" loading="lazy"/>`:'<div style="width:100%;height:100%;background:var(--s);display:flex;align-items:center;justify-content:center;font-size:3rem">🏡</div>'}
+        <span class="prop-tag">${p.typeLabel||''}</span>
       </div>
       <div class="prop-body">
         <h3>${p.name}</h3>
         <p class="prop-location">📍 ${p.location}</p>
         <div class="prop-features">
-          ${p.m2?`<span class="feat">📐 ${p.m2} m²</span>`:''}
+          ${p.m2t?`<span class="feat">🏡 ${p.m2t} m² terreno</span>`:(p.m2?`<span class="feat">📐 ${p.m2} m²</span>`:'')}
+          ${p.m2c?`<span class="feat">🏗 ${p.m2c} m² const.</span>`:''}
           ${p.beds?`<span class="feat">🛏 ${p.beds} rec</span>`:''}
           ${p.baths?`<span class="feat">🚿 ${p.baths} baños</span>`:''}
         </div>
@@ -1180,11 +1140,46 @@ function renderGrid(){
     </div>
   `).join('');
 }
+
+// ── PROJECT MODAL (dynamic) ───────────────
+function openProjModal(j){
+  const projs=getProjs();
+  const p=projs[j];
+  const existing=document.getElementById('dyn-proj-modal');
+  if(existing) existing.remove();
+  const el=document.createElement('div');
+  el.className='modal-bg';el.id='dyn-proj-modal';
+  el.onclick=e=>{if(e.target===el)el.remove();};
+  el.innerHTML=`<div class="modal">
+    <button class="modal-close" onclick="document.getElementById('dyn-proj-modal').remove()">✕</button>
+    ${p.foto?`<div class="modal-gallery"><img src="${p.foto}" style="width:100%;height:100%;object-fit:cover"/></div>`:''}
+    <div class="modal-body">
+      <p class="modal-dev">${p.dev||''}</p>
+      <h2>${p.nombre}</h2>
+      <p class="modal-price">${p.precio||'Consultar'}</p>
+      <div class="modal-specs">
+        ${p.entrega?`<div class="ms"><strong>${p.entrega}</strong><span>Entrega</span></div>`:''}
+        ${p.m2?`<div class="ms"><strong>${p.m2}</strong><span>Superficies</span></div>`:''}
+        ${p.deptos?`<div class="ms"><strong>${p.deptos}</strong><span>Unidades</span></div>`:''}
+      </div>
+      <p class="modal-desc">${p.desc||''}</p>
+      <div class="modal-actions">
+        <button class="modal-btn gold" onclick="document.getElementById('dyn-proj-modal').remove();goTo('contacto')">Quiero información →</button>
+        ${p.url?`<a href="${p.url}" target="_blank"><button class="modal-btn ghost">Sitio oficial →</button></a>`:''}
+      </div>
+    </div>
+  </div>`;
+  document.body.appendChild(el);
+  setTimeout(()=>el.classList.add('open'),10);
+}
+
+renderProjects();
 renderGrid();
 
 // ── PROPERTY MODAL ────────────────────────
 let galIdx=0;
 function openPropModal(i){
+  const properties=getProps().filter(p=>p.status!=='vendida');
   const p=properties[i];
   let m=document.getElementById('modal-bg-prop');
   if(!m){
@@ -1227,7 +1222,8 @@ function fillPropModal(p,i){
   document.getElementById('pm-name').textContent=p.name;
   document.getElementById('pm-price').textContent=p.price;
   document.getElementById('pm-specs').innerHTML=`
-    ${p.m2?`<div class="modal-spec"><strong>${p.m2} m²</strong><span>Superficie</span></div>`:''}
+    ${p.m2t?`<div class="modal-spec"><strong>${p.m2t} m²</strong><span>Terreno</span></div>`:(p.m2?`<div class="modal-spec"><strong>${p.m2} m²</strong><span>Superficie</span></div>`:'')}
+    ${p.m2c?`<div class="modal-spec"><strong>${p.m2c} m²</strong><span>Construcción</span></div>`:''}
     ${p.beds?`<div class="modal-spec"><strong>${p.beds}</strong><span>Recámaras</span></div>`:''}
     ${p.baths?`<div class="modal-spec"><strong>${p.baths}</strong><span>Baños</span></div>`:''}
     ${p.feats?`<div class="modal-spec"><strong style="font-size:.78rem">${p.feats}</strong><span>Extras</span></div>`:''}
@@ -1240,14 +1236,16 @@ function fillPropModal(p,i){
   `;
 }
 function galNav(d){
+  const properties=getProps().filter(p=>p.status!=='vendida');
   const p=properties[window._ci];
-  if(!p||!p.photos.length)return;
+  if(!p||!p.photos||!p.photos.length)return;
   galIdx=(galIdx+d+p.photos.length)%p.photos.length;
   document.getElementById('pm-gimg').src=p.photos[galIdx];
 }
 
 // ── PRINT / PDF ───────────────────────────
 function printSheet(i,withLogo){
+  const properties=getProps().filter(p=>p.status!=='vendida');
   const p=properties[i];
   const sheet=document.getElementById('print-sheet');
   sheet.style.display='block';
