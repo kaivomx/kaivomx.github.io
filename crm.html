@@ -832,6 +832,7 @@ function renderThumbs(){
 }
 
 function genCopy(){
+  try{
   const name=document.getElementById('p-name').value.trim();
   const type=document.getElementById('p-type').value;
   const loc=document.getElementById('p-loc').value.trim()||'Aguascalientes';
@@ -877,8 +878,9 @@ function genCopy(){
   const opener=openers[Math.floor(Math.random()*openers.length)];
   const cierre=cierres[type]||cierres.casa;
   const box=document.getElementById('p-copy');
-  box.textContent=`${opener}\n\n${cuerpo}\n${cierre}\n\n📲 Contáctanos hoy — las mejores propiedades no esperan.`;
+  box.textContent=opener+'\n\n'+cuerpo+'\n'+cierre+'\n\n📲 Contáctanos hoy — las mejores propiedades no esperan.';
   box.style.display='block';
+  }catch(err){toast('Error al generar: '+err.message,'red');}
 }
 
 function fmtPrice(input){
@@ -888,34 +890,55 @@ function fmtPrice(input){
 }
 
 function saveProp(){
-  const name=document.getElementById('p-name').value.trim();
-  if(!name){toast('Ingresa el nombre de la propiedad','red');return;}
-  const typeVal=document.getElementById('p-type').value;
-  const labels={casa:'Casa',depto:'Departamento',terreno:'Terreno',lote:'Lote',oficina:'Oficina'};
-  const copyEl=document.getElementById('p-copy');
-  const rawPrice=document.getElementById('p-price').value.trim();
-  const prop={
-    id:Date.now(),name,type:typeVal,typeLabel:labels[typeVal],
-    location:document.getElementById('p-loc').value.trim()||'Aguascalientes',
-    price:rawPrice||'Consultar',
-    m2t:document.getElementById('p-m2t').value.trim(),
-    m2c:document.getElementById('p-m2c').value.trim(),
-    m2:document.getElementById('p-m2t').value.trim(),
-    beds:document.getElementById('p-beds').value,
-    baths:document.getElementById('p-baths').value,
-    feats:document.getElementById('p-feats').value.trim(),
-    desc:document.getElementById('p-desc').value.trim(),
-    copyDesc:copyEl.style.display!=='none'?copyEl.textContent:'',
-    photos:[...propPhotos],
-    status:'activa'
-  };
-  const props=getProps();props.unshift(prop);saveProps(props);
-  ['p-name','p-loc','p-price','p-m2t','p-m2c','p-beds','p-baths','p-feats','p-desc'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('p-thumbs').innerHTML='';
-  document.getElementById('p-copy').style.display='none';
-  propPhotos=[];
-  renderPropList();renderFichas();
-  toast(`✓ "${name}" publicada`);
+  try{
+    var nameEl=document.getElementById('p-name');
+    var name=nameEl.value.trim();
+    if(!name){
+      nameEl.style.border='2px solid var(--red)';
+      nameEl.focus();
+      toast('⚠️ Escribe el nombre de la propiedad primero','red');
+      setTimeout(function(){nameEl.style.border='';},3000);
+      return;
+    }
+    nameEl.style.border='';
+    var typeVal=document.getElementById('p-type').value;
+    var labels={casa:'Casa',depto:'Departamento',terreno:'Terreno',lote:'Lote',oficina:'Oficina'};
+    var copyEl=document.getElementById('p-copy');
+    var rawPrice=document.getElementById('p-price').value.trim();
+    var prop={
+      id:Date.now(),
+      name:name,
+      type:typeVal,
+      typeLabel:labels[typeVal],
+      location:document.getElementById('p-loc').value.trim()||'Aguascalientes',
+      price:rawPrice||'Consultar',
+      m2t:document.getElementById('p-m2t').value.trim(),
+      m2c:document.getElementById('p-m2c').value.trim(),
+      m2:document.getElementById('p-m2t').value.trim(),
+      beds:document.getElementById('p-beds').value,
+      baths:document.getElementById('p-baths').value,
+      feats:document.getElementById('p-feats').value.trim(),
+      desc:document.getElementById('p-desc').value.trim(),
+      copyDesc:copyEl.style.display!=='none'?copyEl.textContent:'',
+      photos:propPhotos.slice(),
+      status:'activa'
+    };
+    var props=getProps();
+    props.unshift(prop);
+    saveProps(props);
+    ['p-name','p-loc','p-price','p-m2t','p-m2c','p-beds','p-baths','p-feats','p-desc'].forEach(function(id){
+      var el=document.getElementById(id);
+      if(el) el.value='';
+    });
+    document.getElementById('p-thumbs').innerHTML='';
+    document.getElementById('p-copy').style.display='none';
+    propPhotos=[];
+    renderPropList();
+    renderFichas();
+    toast('✓ "'+name+'" publicada en el sitio');
+  }catch(err){
+    toast('Error: '+err.message,'red');
+  }
 }
 
 function renderPropList(){
