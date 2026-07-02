@@ -197,6 +197,12 @@ input,select,textarea{font-family:'Inter',sans-serif;color:var(--w)}
 .empty .e-icon{font-size:2.5rem;margin-bottom:10px;opacity:.4}
 .empty p{font-size:.82rem}
 
+/* ── TOAST ── */
+.toast{position:fixed;bottom:calc(var(--nav-h) + var(--safe-b) + 12px);left:50%;transform:translateX(-50%) translateY(20px);background:var(--card);border:1px solid var(--b);border-radius:12px;padding:12px 20px;font-size:.82rem;color:var(--w);z-index:9000;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,.4)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.green{border-color:rgba(74,222,128,.3);color:var(--green)}
+.toast.red{border-color:rgba(248,113,113,.3);color:var(--red)}
+
 /* ── PRINT ── */
 @media print{
   body>*:not(#print-sheet){display:none!important}
@@ -495,6 +501,9 @@ input,select,textarea{font-family:'Inter',sans-serif;color:var(--w)}
 <!-- FAB -->
 <button class="fab" id="fab" onclick="onFab()" style="display:none" title="Agregar">＋</button>
 
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
 <!-- PRINT SHEET -->
 <div id="print-sheet" style="display:none"></div>
 
@@ -562,9 +571,8 @@ function goView(id,el,type){
     if(map[id]) document.getElementById(map[id])?.classList.add('active');
   }
 
-  // update fab label
-  const fabMap={leads:'＋',propiedades:'＋',dashboard:null,proyectos:null,fichas:null,config:null};
-  document.getElementById('fab').style.display=fabMap[id]!==undefined&&fabMap[id]!==null?'flex':'none';
+  // FAB solo en leads
+  document.getElementById('fab').style.display=id==='leads'?'flex':'none';
 
   if(id==='dashboard') renderDashboard();
   if(id==='leads') renderLeads();
@@ -723,17 +731,22 @@ function addNote(){
 }
 
 function deleteNote(leadId,noteIdx){
-  if(!confirm('¿Eliminar esta nota?')) return;
   const leads=getLeads();
   const i=leads.findIndex(l=>l.id==leadId);
   if(i>-1){leads[i].notas.splice(noteIdx,1);saveLeads(leads);}
   openLead(leadId);
+  toast('Nota eliminada');
 }
 
 function deleteLead(id){
-  if(!confirm('¿Eliminar este lead?')) return;
-  saveLeads(getLeads().filter(l=>l.id!=id));
-  closeLead();renderLeads();updateBadge();renderDashboard();
+  const leads=getLeads();
+  const l=leads.find(x=>x.id==id);
+  if(!l) return;
+  showConfirm(`¿Eliminar a ${l.nombre}?`, ()=>{
+    saveLeads(getLeads().filter(x=>x.id!=id));
+    closeLead();renderLeads();updateBadge();renderDashboard();
+    toast('Lead eliminado');
+  });
 }
 
 function openAddModal(){document.getElementById('add-modal').classList.add('open');}
@@ -741,7 +754,7 @@ function closeAddModal(){document.getElementById('add-modal').classList.remove('
 function saveAddLead(){
   const nombre=document.getElementById('al-nombre').value.trim();
   const tel=document.getElementById('al-tel').value.trim();
-  if(!nombre||!tel){alert('Nombre y teléfono son obligatorios.');return;}
+  if(!nombre||!tel){toast('Nombre y teléfono son obligatorios','red');return;}
   const lead={
     id:Date.now(),nombre,telefono:tel,
     email:document.getElementById('al-email').value.trim(),
@@ -753,6 +766,7 @@ function saveAddLead(){
   closeAddModal();
   ['al-nombre','al-tel','al-email','al-budget'].forEach(id=>document.getElementById(id).value='');
   renderLeads();updateBadge();renderDashboard();
+  toast('✓ Lead agregado');
 }
 
 // ── PROPIEDADES ────────────────────────────────
@@ -805,7 +819,7 @@ function genCopy(){
 
 function saveProp(){
   const name=document.getElementById('p-name').value.trim();
-  if(!name){alert('Ingresa el nombre de la propiedad.');return;}
+  if(!name){toast('Ingresa el nombre de la propiedad','red');return;}
   const typeVal=document.getElementById('p-type').value;
   const labels={casa:'Casa',depto:'Departamento',terreno:'Terreno',lote:'Lote',oficina:'Oficina'};
   const copyEl=document.getElementById('p-copy');
@@ -827,7 +841,7 @@ function saveProp(){
   document.getElementById('p-copy').style.display='none';
   propPhotos=[];
   renderPropList();renderFichas();
-  alert(`✅ "${name}" publicada en el sitio.`);
+  toast(`✓ "${name}" publicada`);
 }
 
 function renderPropList(){
@@ -844,8 +858,11 @@ function renderPropList(){
 
 function deleteProp(i){
   const props=getProps();
-  if(!confirm(`¿Eliminar "${props[i].name}"?`)) return;
-  props.splice(i,1);saveProps(props);renderPropList();renderFichas();
+  const nm=props[i].name;
+  showConfirm(`¿Eliminar "${nm}"?`,()=>{
+    const p2=getProps();p2.splice(i,1);saveProps(p2);renderPropList();renderFichas();
+    toast('Propiedad eliminada');
+  });
 }
 
 // ── PROYECTOS ──────────────────────────────────
@@ -880,7 +897,7 @@ function saveProj(i){
     deptos:document.getElementById(`pr-${i}-deptos`).value,
     desc:document.getElementById(`pr-${i}-desc`).value,
   };
-  saveProjs(projs);alert('✅ Proyecto actualizado.');
+  saveProjs(projs);toast('✓ Proyecto actualizado');
 }
 
 // ── FICHAS ─────────────────────────────────────
@@ -930,21 +947,21 @@ function loadCfg(){
 }
 function saveConfig(){
   saveCfg({tel:document.getElementById('cfg-tel').value,email:document.getElementById('cfg-email').value});
-  alert('✅ Guardado.');
+  toast('✓ Configuración guardada');
 }
 function changePw(){
   const p1=document.getElementById('cfg-pw1').value;
   const p2=document.getElementById('cfg-pw2').value;
-  if(!p1){alert('Ingresa la nueva contraseña.');return;}
-  if(p1!==p2){alert('Las contraseñas no coinciden.');return;}
+  if(!p1){toast('Ingresa la nueva contraseña','red');return;}
+  if(p1!==p2){toast('Las contraseñas no coinciden','red');return;}
   localStorage.setItem(PW_KEY,p1);
   document.getElementById('cfg-pw1').value='';
   document.getElementById('cfg-pw2').value='';
-  alert('✅ Contraseña cambiada.');
+  toast('✓ Contraseña cambiada');
 }
 function exportLeads(){
   const leads=getLeads();
-  if(!leads.length){alert('Sin leads para exportar.');return;}
+  if(!leads.length){toast('Sin leads para exportar','red');return;}
   const header='Nombre,Teléfono,Email,Proyecto,Presupuesto,Estado,Fecha\n';
   const rows=leads.map(l=>`"${l.nombre}","${l.telefono}","${l.email||''}","${l.proyecto||''}","${l.presupuesto||''}","${l.estado}","${fmtDate(l.fecha)}"`).join('\n');
   const a=document.createElement('a');
@@ -952,9 +969,38 @@ function exportLeads(){
   a.download='kaivo-leads.csv';a.click();
 }
 function clearAll(){
-  if(!confirm('¿Borrar TODOS los datos?')) return;
-  ['kaivo_leads','kaivo_props','kaivo_projects'].forEach(k=>localStorage.removeItem(k));
-  alert('Datos borrados.');initCRM();renderLeads();renderPropList();renderFichas();
+  showConfirm('¿Borrar TODOS los datos? No se puede deshacer.',()=>{
+    ['kaivo_leads','kaivo_props','kaivo_projects'].forEach(k=>localStorage.removeItem(k));
+    initCRM();renderLeads();renderPropList();renderFichas();
+    toast('Datos borrados');
+  });
+}
+
+// ── CONFIRM ─────────────────────────────────────
+function showConfirm(msg, onOk){
+  const existing=document.getElementById('confirm-overlay');
+  if(existing) existing.remove();
+  const el=document.createElement('div');
+  el.id='confirm-overlay';
+  el.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px)';
+  el.innerHTML=`<div style="background:var(--card);border:1px solid var(--b);border-radius:16px;padding:24px;max-width:320px;width:100%;text-align:center">
+    <p style="font-size:.9rem;color:var(--w);margin-bottom:20px;line-height:1.6">${msg}</p>
+    <div style="display:flex;gap:10px">
+      <button onclick="document.getElementById('confirm-overlay').remove()" style="flex:1;padding:12px;border-radius:10px;background:var(--b);border:1px solid var(--b);color:var(--s2);font-size:.8rem;cursor:pointer">Cancelar</button>
+      <button id="confirm-ok" style="flex:1;padding:12px;border-radius:10px;background:var(--red);border:none;color:#fff;font-size:.8rem;font-weight:700;cursor:pointer">Eliminar</button>
+    </div>
+  </div>`;
+  document.body.appendChild(el);
+  document.getElementById('confirm-ok').onclick=()=>{el.remove();onOk();};
+}
+
+// ── TOAST ──────────────────────────────────────
+function toast(msg, type='green'){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast '+type;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer=setTimeout(()=>t.classList.remove('show'),3000);
 }
 
 // ── UTILS ──────────────────────────────────────
