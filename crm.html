@@ -866,11 +866,14 @@ function deleteProp(i){
 }
 
 // ── PROYECTOS ──────────────────────────────────
+let projPhotos={};
+
 function renderProjs(){
   const projs=getProjs();
   document.getElementById('proj-list').innerHTML=projs.map((p,i)=>`
     <div class="proj-item">
       <div class="proj-item-name">${p.nombre}</div>
+      ${p.foto?`<img src="${p.foto}" style="width:100%;height:160px;object-fit:cover;border-radius:10px;margin-bottom:12px"/>`:''}
       <div class="f-field"><label class="f-label">Nombre</label><input class="f-input" id="pr-${i}-nombre" value="${p.nombre}"/></div>
       <div class="f-field"><label class="f-label">Desarrollador</label><input class="f-input" id="pr-${i}-dev" value="${p.dev}"/></div>
       <div class="f-row">
@@ -882,8 +885,25 @@ function renderProjs(){
         <div class="f-field"><label class="f-label">Unidades</label><input class="f-input" id="pr-${i}-deptos" value="${p.deptos}"/></div>
       </div>
       <div class="f-field"><label class="f-label">Descripción</label><textarea class="f-input f-textarea" id="pr-${i}-desc">${p.desc}</textarea></div>
+      <div class="f-field"><label class="f-label">URL del proyecto</label><input class="f-input" id="pr-${i}-url" value="${p.url||''}"/></div>
+      <div class="photo-drop" style="margin-bottom:12px">
+        <input type="file" accept="image/*" onchange="handleProjPhoto(this,${i})"/>
+        <p>📸 <strong>${p.foto?'Cambiar foto':'Agregar foto'}</strong></p>
+      </div>
+      <div id="pr-${i}-preview"></div>
       <button class="btn-primary" onclick="saveProj(${i})">Guardar →</button>
     </div>`).join('');
+}
+
+function handleProjPhoto(input,i){
+  const f=input.files[0];
+  if(!f) return;
+  const r=new FileReader();
+  r.onload=e=>{
+    projPhotos[i]=e.target.result;
+    document.getElementById(`pr-${i}-preview`).innerHTML=`<img src="${e.target.result}" style="width:100%;height:140px;object-fit:cover;border-radius:10px;margin-bottom:10px"/>`;
+  };
+  r.readAsDataURL(f);
 }
 
 function saveProj(i){
@@ -896,8 +916,12 @@ function saveProj(i){
     m2:document.getElementById(`pr-${i}-m2`).value,
     deptos:document.getElementById(`pr-${i}-deptos`).value,
     desc:document.getElementById(`pr-${i}-desc`).value,
+    url:document.getElementById(`pr-${i}-url`).value,
   };
-  saveProjs(projs);toast('✓ Proyecto actualizado');
+  if(projPhotos[i]) projs[i].foto=projPhotos[i];
+  saveProjs(projs);
+  renderProjs();
+  toast('✓ Proyecto actualizado');
 }
 
 // ── FICHAS ─────────────────────────────────────
