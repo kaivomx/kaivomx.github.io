@@ -1,0 +1,24 @@
+{
+  "name": "KAIVO CRM",
+  "short_name": "KAIVO",
+  "description": "Panel CRM — KAIVO Real Estate",
+  "start_url": "/crm.html",
+  "display": "standalone",
+  "background_color": "#09090a",
+  "theme_color": "#09090a",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
