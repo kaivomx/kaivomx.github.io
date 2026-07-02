@@ -507,6 +507,7 @@ function doLogin(){
     document.getElementById('login-screen').style.display='none';
     document.getElementById('app').style.display='flex';
     document.getElementById('fab').style.display='flex';
+    document.getElementById('fab').title='Agregar lead';
     initCRM();
   } else {
     document.getElementById('login-err').style.display='block';
@@ -574,7 +575,7 @@ function goView(id,el,type){
 }
 
 function onFab(){
-  if(currentView==='leads') openAddModal();
+  if(currentView==='leads'||currentView==='dashboard') openAddModal();
   if(currentView==='propiedades') document.getElementById('scroll-area').scrollTo({top:0,behavior:'smooth'});
 }
 
@@ -644,14 +645,13 @@ function renderLeads(){
 
   cont.innerHTML=ESTADOS.map(estado=>{
     const cards=filtered.filter(l=>l.estado===estado);
-    if(!cards.length) return '';
     return `<div class="pipe-col">
       <div class="pipe-head">
         <span class="pipe-title" style="color:${E_COLORS[estado]}">${E_LABELS[estado]}</span>
         <span class="pipe-count">${cards.length}</span>
       </div>
       <div class="pipe-body">
-        ${cards.map(l=>`
+        ${cards.length?cards.map(l=>`
           <div class="lead-card">
             <div class="lc-top"><span class="lc-name">${l.nombre}</span><span class="lc-date">${fmtDate(l.fecha)}</span></div>
             <div class="lc-proj">${l.proyecto||'Sin proyecto'}</div>
@@ -661,7 +661,7 @@ function renderLeads(){
               <a class="lc-btn call" href="tel:${l.telefono}">Llamar</a>
               <button class="lc-btn detail" onclick="openLead('${l.id}')">Ver →</button>
             </div>
-          </div>`).join('')}
+          </div>`).join(''):`<div class="empty-pipe">Sin leads en esta etapa</div>`}
       </div>
     </div>`;
   }).join('');
