@@ -333,21 +333,22 @@ input,select,textarea{font-family:'Inter',sans-serif;color:var(--w)}
         <div class="form-card">
           <h3>Nueva Propiedad</h3>
           <div class="f-field"><label class="f-label">Nombre *</label><input class="f-input" id="p-name" placeholder="Casa en Campestre..."/></div>
-          <div class="f-row">
-            <div class="f-field"><label class="f-label">Tipo</label>
-              <select class="f-input" id="p-type">
-                <option value="casa">Casa</option>
-                <option value="depto">Departamento</option>
-                <option value="terreno">Terreno</option>
-                <option value="lote">Lote</option>
-                <option value="oficina">Oficina</option>
-              </select>
-            </div>
-            <div class="f-field"><label class="f-label">Precio</label><input class="f-input" id="p-price" placeholder="$3,500,000"/></div>
+          <div class="f-field"><label class="f-label">Tipo</label>
+            <select class="f-input" id="p-type">
+              <option value="casa">Casa</option>
+              <option value="depto">Departamento</option>
+              <option value="terreno">Terreno</option>
+              <option value="lote">Lote</option>
+              <option value="oficina">Oficina</option>
+            </select>
           </div>
           <div class="f-row">
             <div class="f-field"><label class="f-label">Colonia</label><input class="f-input" id="p-loc" placeholder="Campestre"/></div>
-            <div class="f-field"><label class="f-label">m²</label><input class="f-input" id="p-m2" placeholder="150"/></div>
+            <div class="f-field"><label class="f-label">Precio</label><input class="f-input" id="p-price" placeholder="$0" oninput="fmtPrice(this)" inputmode="numeric"/></div>
+          </div>
+          <div class="f-row">
+            <div class="f-field"><label class="f-label">m² Terreno</label><input class="f-input" id="p-m2t" placeholder="200"/></div>
+            <div class="f-field"><label class="f-label">m² Construcción</label><input class="f-input" id="p-m2c" placeholder="150"/></div>
           </div>
           <div class="f-row">
             <div class="f-field"><label class="f-label">Recámaras</label><input class="f-input" type="number" id="p-beds" placeholder="3" min="0"/></div>
@@ -817,26 +818,36 @@ function genCopy(){
   box.style.display='block';
 }
 
+function fmtPrice(input){
+  let v=input.value.replace(/[^0-9]/g,'');
+  if(!v){input.value='';return;}
+  input.value='$'+Number(v).toLocaleString('es-MX');
+}
+
 function saveProp(){
   const name=document.getElementById('p-name').value.trim();
   if(!name){toast('Ingresa el nombre de la propiedad','red');return;}
   const typeVal=document.getElementById('p-type').value;
   const labels={casa:'Casa',depto:'Departamento',terreno:'Terreno',lote:'Lote',oficina:'Oficina'};
   const copyEl=document.getElementById('p-copy');
+  const rawPrice=document.getElementById('p-price').value.trim();
   const prop={
     id:Date.now(),name,type:typeVal,typeLabel:labels[typeVal],
     location:document.getElementById('p-loc').value.trim()||'Aguascalientes',
-    price:document.getElementById('p-price').value.trim()||'Consultar',
-    m2:document.getElementById('p-m2').value.trim(),
+    price:rawPrice||'Consultar',
+    m2t:document.getElementById('p-m2t').value.trim(),
+    m2c:document.getElementById('p-m2c').value.trim(),
+    m2:document.getElementById('p-m2t').value.trim(),
     beds:document.getElementById('p-beds').value,
     baths:document.getElementById('p-baths').value,
     feats:document.getElementById('p-feats').value.trim(),
     desc:document.getElementById('p-desc').value.trim(),
     copyDesc:copyEl.style.display!=='none'?copyEl.textContent:'',
-    photos:[...propPhotos]
+    photos:[...propPhotos],
+    status:'activa'
   };
   const props=getProps();props.unshift(prop);saveProps(props);
-  ['p-name','p-loc','p-price','p-m2','p-beds','p-baths','p-feats','p-desc'].forEach(id=>document.getElementById(id).value='');
+  ['p-name','p-loc','p-price','p-m2t','p-m2c','p-beds','p-baths','p-feats','p-desc'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('p-thumbs').innerHTML='';
   document.getElementById('p-copy').style.display='none';
   propPhotos=[];
@@ -848,15 +859,37 @@ function renderPropList(){
   const props=getProps();
   document.getElementById('prop-count').textContent=props.length;
   const list=document.getElementById('prop-list');
-  list.innerHTML=props.length?props.map((p,i)=>`
-    <div class="prop-item">
+  list.innerHTML=props.length?props.map((p,i)=>{
+    const vendida=p.status==='vendida';
+    return`<div class="prop-item" style="${vendida?'opacity:.5':''}">
       ${p.photos[0]?`<img src="${p.photos[0]}" alt="${p.name}"/>`:`<div class="prop-img-ph">🏡</div>`}
-      <div class="prop-info"><strong>${p.name}</strong><span>${p.typeLabel} · ${p.location} · ${p.price}</span></div>
-      <div style="display:flex;gap:6px;flex-shrink:0">
-        <button class="del-btn" style="background:rgba(201,184,154,.12);color:var(--accent)" onclick="editProp(${i})">✏️</button>
-        <button class="del-btn" onclick="deleteProp(${i})">🗑</button>
+      <div class="prop-info">
+        <strong>${p.name}</strong>
+        <span>${p.typeLabel} · ${p.location} · ${p.price}</span>
+        ${vendida?'<span style="font-size:.68rem;color:var(--red);letter-spacing:1px">VENDIDA</span>':'<span style="font-size:.68rem;color:var(--green);letter-spacing:1px">ACTIVA</span>'}
       </div>
-    </div>`).join(''):'<div class="empty"><div class="e-icon">🏡</div><p>Sin propiedades publicadas aún.</p></div>';
+      <div style="display:flex;gap:6px;flex-shrink:0">
+        <button class="del-btn" style="background:rgba(201,184,154,.12);color:var(--accent)" onclick="editProp(${i})" title="Editar">✏️</button>
+        <button class="del-btn" style="background:rgba(74,222,128,.08);color:var(--${vendida?'accent':'green'})" onclick="toggleVendida(${i})" title="${vendida?'Reactivar':'Dar de baja'}">${vendida?'↩':'✓'}</button>
+        <button class="del-btn" onclick="deleteProp(${i})" title="Eliminar">🗑</button>
+      </div>
+    </div>`;
+  }).join(''):'<div class="empty"><div class="e-icon">🏡</div><p>Sin propiedades publicadas aún.</p></div>';
+}
+
+function toggleVendida(i){
+  const props=getProps();
+  const vendida=props[i].status==='vendida';
+  if(vendida){
+    props[i].status='activa';
+    saveProps(props);renderPropList();renderFichas();
+    toast('Propiedad reactivada');
+  } else {
+    showConfirm(`¿Marcar "${props[i].name}" como vendida?`,()=>{
+      const p2=getProps();p2[i].status='vendida';saveProps(p2);renderPropList();renderFichas();
+      toast('✓ Marcada como vendida');
+    });
+  }
 }
 
 function deleteProp(i){
@@ -887,11 +920,15 @@ function editProp(i){
       <div class="f-field"><label class="f-label">Nombre</label><input class="f-input" id="ep-name" value="${p.name.replace(/"/g,'&quot;')}"/></div>
       <div class="f-row">
         <div class="f-field"><label class="f-label">Ubicación</label><input class="f-input" id="ep-loc" value="${p.location.replace(/"/g,'&quot;')}"/></div>
-        <div class="f-field"><label class="f-label">Precio</label><input class="f-input" id="ep-price" value="${p.price.replace(/"/g,'&quot;')}"/></div>
+        <div class="f-field"><label class="f-label">Precio</label><input class="f-input" id="ep-price" value="${p.price.replace(/"/g,'&quot;')}" oninput="fmtPrice(this)" inputmode="numeric"/></div>
       </div>
       <div class="f-row">
-        <div class="f-field"><label class="f-label">m²</label><input class="f-input" id="ep-m2" value="${(p.m2||'').replace(/"/g,'&quot;')}"/></div>
+        <div class="f-field"><label class="f-label">m² Terreno</label><input class="f-input" id="ep-m2t" value="${(p.m2t||p.m2||'').replace(/"/g,'&quot;')}"/></div>
+        <div class="f-field"><label class="f-label">m² Construcción</label><input class="f-input" id="ep-m2c" value="${(p.m2c||'').replace(/"/g,'&quot;')}"/></div>
+      </div>
+      <div class="f-row">
         <div class="f-field"><label class="f-label">Recámaras</label><input class="f-input" id="ep-beds" value="${p.beds||''}"/></div>
+        <div class="f-field"><label class="f-label">Baños</label><input class="f-input" id="ep-baths" value="${p.baths||''}"/></div>
       </div>
       <div class="f-field"><label class="f-label">Descripción</label><textarea class="f-input f-textarea" id="ep-desc">${p.desc||''}</textarea></div>
       <label class="f-label" style="margin-bottom:8px;display:block">Fotos actuales</label>
@@ -939,8 +976,11 @@ function saveEditProp(i){
     name:document.getElementById('ep-name').value.trim()||props[i].name,
     location:document.getElementById('ep-loc').value.trim()||props[i].location,
     price:document.getElementById('ep-price').value.trim()||props[i].price,
-    m2:document.getElementById('ep-m2').value.trim(),
+    m2t:document.getElementById('ep-m2t').value.trim(),
+    m2c:document.getElementById('ep-m2c').value.trim(),
+    m2:document.getElementById('ep-m2t').value.trim(),
     beds:document.getElementById('ep-beds').value.trim(),
+    baths:document.getElementById('ep-baths').value.trim(),
     desc:document.getElementById('ep-desc').value.trim(),
     photos:[...editPropPhotos]
   };
