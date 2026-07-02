@@ -852,7 +852,10 @@ function renderPropList(){
     <div class="prop-item">
       ${p.photos[0]?`<img src="${p.photos[0]}" alt="${p.name}"/>`:`<div class="prop-img-ph">🏡</div>`}
       <div class="prop-info"><strong>${p.name}</strong><span>${p.typeLabel} · ${p.location} · ${p.price}</span></div>
-      <button class="del-btn" onclick="deleteProp(${i})">🗑</button>
+      <div style="display:flex;gap:6px;flex-shrink:0">
+        <button class="del-btn" style="background:rgba(201,184,154,.12);color:var(--accent)" onclick="editProp(${i})">✏️</button>
+        <button class="del-btn" onclick="deleteProp(${i})">🗑</button>
+      </div>
     </div>`).join(''):'<div class="empty"><div class="e-icon">🏡</div><p>Sin propiedades publicadas aún.</p></div>';
 }
 
@@ -863,6 +866,88 @@ function deleteProp(i){
     const p2=getProps();p2.splice(i,1);saveProps(p2);renderPropList();renderFichas();
     toast('Propiedad eliminada');
   });
+}
+
+let editPropPhotos=[];
+function editProp(i){
+  const props=getProps();
+  const p=props[i];
+  editPropPhotos=[...p.photos];
+  const existing=document.getElementById('prop-edit-overlay');
+  if(existing) existing.remove();
+  const el=document.createElement('div');
+  el.id='prop-edit-overlay';
+  el.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9000;overflow-y:auto;padding:16px;box-sizing:border-box';
+  el.innerHTML=`
+    <div style="background:var(--card);border:1px solid var(--b);border-radius:18px;padding:20px;max-width:520px;margin:auto">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <h2 style="font-family:'Cormorant Garamond',serif;font-weight:300;font-size:1.3rem;color:var(--w)">Editar propiedad</h2>
+        <button onclick="document.getElementById('prop-edit-overlay').remove()" style="background:none;border:none;color:var(--s2);font-size:1.3rem;cursor:pointer;padding:4px">✕</button>
+      </div>
+      <div class="f-field"><label class="f-label">Nombre</label><input class="f-input" id="ep-name" value="${p.name.replace(/"/g,'&quot;')}"/></div>
+      <div class="f-row">
+        <div class="f-field"><label class="f-label">Ubicación</label><input class="f-input" id="ep-loc" value="${p.location.replace(/"/g,'&quot;')}"/></div>
+        <div class="f-field"><label class="f-label">Precio</label><input class="f-input" id="ep-price" value="${p.price.replace(/"/g,'&quot;')}"/></div>
+      </div>
+      <div class="f-row">
+        <div class="f-field"><label class="f-label">m²</label><input class="f-input" id="ep-m2" value="${(p.m2||'').replace(/"/g,'&quot;')}"/></div>
+        <div class="f-field"><label class="f-label">Recámaras</label><input class="f-input" id="ep-beds" value="${p.beds||''}"/></div>
+      </div>
+      <div class="f-field"><label class="f-label">Descripción</label><textarea class="f-input f-textarea" id="ep-desc">${p.desc||''}</textarea></div>
+      <label class="f-label" style="margin-bottom:8px;display:block">Fotos actuales</label>
+      <div id="ep-photos" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px"></div>
+      <div class="photo-drop" style="margin-bottom:16px;cursor:pointer">
+        <input type="file" accept="image/*" multiple onchange="addEditPropPhotos(this)" style="cursor:pointer"/>
+        <p>📸 <strong>Agregar más fotos</strong></p>
+      </div>
+      <button class="btn-primary" onclick="saveEditProp(${i})">Guardar cambios →</button>
+    </div>`;
+  document.body.appendChild(el);
+  renderEditPropPhotos();
+}
+
+function renderEditPropPhotos(){
+  const container=document.getElementById('ep-photos');
+  if(!container) return;
+  if(!editPropPhotos.length){
+    container.innerHTML='<p style="font-size:.8rem;color:var(--s2)">Sin fotos</p>';
+    return;
+  }
+  container.innerHTML=editPropPhotos.map((src,j)=>`
+    <div style="position:relative">
+      <img src="${src}" style="width:80px;height:64px;object-fit:cover;border-radius:8px;border:1px solid var(--b)"/>
+      <button onclick="removeEditPropPhoto(${j})" style="position:absolute;top:-6px;right:-6px;background:var(--red);border:none;color:#fff;border-radius:50%;width:20px;height:20px;font-size:.7rem;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0">✕</button>
+    </div>`).join('');
+}
+
+function removeEditPropPhoto(j){
+  editPropPhotos.splice(j,1);
+  renderEditPropPhotos();
+}
+
+function addEditPropPhotos(input){
+  Array.from(input.files).forEach(f=>{
+    const r=new FileReader();
+    r.onload=e=>{ editPropPhotos.push(e.target.result); renderEditPropPhotos(); };
+    r.readAsDataURL(f);
+  });
+}
+
+function saveEditProp(i){
+  const props=getProps();
+  props[i]={...props[i],
+    name:document.getElementById('ep-name').value.trim()||props[i].name,
+    location:document.getElementById('ep-loc').value.trim()||props[i].location,
+    price:document.getElementById('ep-price').value.trim()||props[i].price,
+    m2:document.getElementById('ep-m2').value.trim(),
+    beds:document.getElementById('ep-beds').value.trim(),
+    desc:document.getElementById('ep-desc').value.trim(),
+    photos:[...editPropPhotos]
+  };
+  saveProps(props);
+  document.getElementById('prop-edit-overlay').remove();
+  renderPropList();renderFichas();
+  toast('✓ Propiedad actualizada');
 }
 
 // ── PROYECTOS ──────────────────────────────────
@@ -886,8 +971,9 @@ function renderProjs(){
       </div>
       <div class="f-field"><label class="f-label">Descripción</label><textarea class="f-input f-textarea" id="pr-${i}-desc">${p.desc}</textarea></div>
       <div class="f-field"><label class="f-label">URL del proyecto</label><input class="f-input" id="pr-${i}-url" value="${p.url||''}"/></div>
-      <div class="photo-drop" style="margin-bottom:12px">
-        <input type="file" accept="image/*" onchange="handleProjPhoto(this,${i})"/>
+      ${p.foto?`<button onclick="removeProjPhoto(${i})" style="width:100%;background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.3);color:var(--red);border-radius:10px;padding:10px;font-size:.82rem;cursor:pointer;margin-bottom:8px">🗑 Quitar foto actual</button>`:''}
+      <div class="photo-drop" style="margin-bottom:12px;cursor:pointer">
+        <input type="file" accept="image/*" onchange="handleProjPhoto(this,${i})" style="cursor:pointer"/>
         <p>📸 <strong>${p.foto?'Cambiar foto':'Agregar foto'}</strong></p>
       </div>
       <div id="pr-${i}-preview"></div>
@@ -904,6 +990,14 @@ function handleProjPhoto(input,i){
     document.getElementById(`pr-${i}-preview`).innerHTML=`<img src="${e.target.result}" style="width:100%;height:140px;object-fit:cover;border-radius:10px;margin-bottom:10px"/>`;
   };
   r.readAsDataURL(f);
+}
+
+function removeProjPhoto(i){
+  const projs=getProjs();
+  projs[i].foto='';
+  saveProjs(projs);
+  renderProjs();
+  toast('Foto eliminada');
 }
 
 function saveProj(i){
