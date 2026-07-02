@@ -661,11 +661,7 @@ function renderLeads(){
   const filtered=q?leads.filter(l=>l.nombre.toLowerCase().includes(q)||(l.telefono||'').includes(q)||(l.email||'').toLowerCase().includes(q)):leads;
   const cont=document.getElementById('leads-content');
 
-  if(!filtered.length){
-    cont.innerHTML='<div class="empty"><div class="e-icon">👥</div><p>Sin leads. Usa el botón + para agregar uno.</p></div>';
-    return;
-  }
-
+  // Siempre mostrar las 6 etapas aunque no haya leads
   cont.innerHTML=ESTADOS.map(estado=>{
     const cards=filtered.filter(l=>l.estado===estado);
     return `<div class="pipe-col">
@@ -675,16 +671,16 @@ function renderLeads(){
       </div>
       <div class="pipe-body">
         ${cards.length?cards.map(l=>`
-          <div class="lead-card">
+          <div class="lead-card" onclick="openLead('${l.id}')">
             <div class="lc-top"><span class="lc-name">${l.nombre}</span><span class="lc-date">${fmtDate(l.fecha)}</span></div>
             <div class="lc-proj">${l.proyecto||'Sin proyecto'}</div>
             ${l.presupuesto?`<span class="lc-budget">${l.presupuesto}</span>`:''}
             <div class="lc-btns">
-              <a class="lc-btn wa" href="https://wa.me/${cleanPhone(l.telefono)}?text=Hola%20${encodeURIComponent(l.nombre)}%2C%20te%20contacto%20de%20KAIVO%20Real%20Estate%20🏡" target="_blank">WhatsApp</a>
-              <a class="lc-btn call" href="tel:${l.telefono}">Llamar</a>
-              <button class="lc-btn detail" onclick="openLead('${l.id}')">Ver →</button>
+              <a class="lc-btn wa" href="https://wa.me/${cleanPhone(l.telefono)}?text=Hola%20${encodeURIComponent(l.nombre)}%2C%20te%20contacto%20de%20KAIVO%20Real%20Estate%20🏡" target="_blank" onclick="event.stopPropagation()">WhatsApp</a>
+              <a class="lc-btn call" href="tel:${l.telefono}" onclick="event.stopPropagation()">Llamar</a>
+              <button class="lc-btn detail" onclick="event.stopPropagation();openLead('${l.id}')">Ver →</button>
             </div>
-          </div>`).join(''):`<div class="empty-pipe">Sin leads en esta etapa</div>`}
+          </div>`).join(''):`<div class="empty-pipe">Sin leads</div>`}
       </div>
     </div>`;
   }).join('');
@@ -786,11 +782,29 @@ function saveAddLead(){
 
 // ── PROPIEDADES ────────────────────────────────
 let propPhotos=[];
+
+function compressImg(file,cb){
+  var r=new FileReader();
+  r.onload=function(e){
+    var img=new Image();
+    img.onload=function(){
+      var canvas=document.createElement('canvas');
+      var MAX=1200;
+      var w=img.width,h=img.height;
+      if(w>MAX){h=Math.round(h*MAX/w);w=MAX;}
+      if(h>MAX){w=Math.round(w*MAX/h);h=MAX;}
+      canvas.width=w;canvas.height=h;
+      canvas.getContext('2d').drawImage(img,0,0,w,h);
+      cb(canvas.toDataURL('image/jpeg',0.75));
+    };
+    img.src=e.target.result;
+  };
+  r.readAsDataURL(file);
+}
+
 function handlePhotos(input){
   Array.from(input.files).forEach(function(f){
-    var r=new FileReader();
-    r.onload=function(e){ propPhotos.push(e.target.result); renderThumbs(); };
-    r.readAsDataURL(f);
+    compressImg(f,function(data){ propPhotos.push(data); renderThumbs(); });
   });
 }
 
@@ -1049,10 +1063,8 @@ function removeEditPropPhoto(j){
 }
 
 function addEditPropPhotos(input){
-  Array.from(input.files).forEach(f=>{
-    const r=new FileReader();
-    r.onload=e=>{ editPropPhotos.push(e.target.result); renderEditPropPhotos(); };
-    r.readAsDataURL(f);
+  Array.from(input.files).forEach(function(f){
+    compressImg(f,function(data){ editPropPhotos.push(data); renderEditPropPhotos(); });
   });
 }
 
