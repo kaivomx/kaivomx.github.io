@@ -21,7 +21,15 @@ const styles = StyleSheet.create({
   footer: { position: "absolute", bottom: 30, left: 40, right: 40, borderTop: "1 solid #ddd", paddingTop: 10, fontSize: 9, color: "#777" },
 });
 
-export default function PropertyPdfDocument({ property, variant }: { property: Property; variant: "corporate" | "plain" }) {
+export default function PropertyPdfDocument({
+  property,
+  variant,
+  baseUrl,
+}: {
+  property: Property;
+  variant: "corporate" | "plain";
+  baseUrl: string;
+}) {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -72,7 +80,7 @@ export default function PropertyPdfDocument({ property, variant }: { property: P
         {property.images.length > 0 && (
           <View style={styles.images}>
             {property.images.slice(0, 2).map((img) => (
-              <Image key={img} src={img.startsWith("http") ? img : `${process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"}${img}`} style={styles.image} />
+              <Image key={img} src={img.startsWith("http") ? img : `${baseUrl}${img}`} style={styles.image} />
             ))}
           </View>
         )}

@@ -12,7 +12,9 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   }
 
   const variant = request.nextUrl.searchParams.get("variant") === "plain" ? "plain" : "corporate";
-  const buffer = await renderToBuffer(<ProjectPdfDocument project={project} variant={variant} />);
+  const buffer = await renderToBuffer(
+    <ProjectPdfDocument project={project} variant={variant} baseUrl={request.nextUrl.origin} />
+  );
 
   return new NextResponse(new Uint8Array(buffer), {
     headers: {

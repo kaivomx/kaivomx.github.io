@@ -17,7 +17,15 @@ const styles = StyleSheet.create({
   footer: { position: "absolute", bottom: 30, left: 40, right: 40, borderTop: "1 solid #ddd", paddingTop: 10, fontSize: 9, color: "#777" },
 });
 
-export default function ProjectPdfDocument({ project, variant }: { project: Project; variant: "corporate" | "plain" }) {
+export default function ProjectPdfDocument({
+  project,
+  variant,
+  baseUrl,
+}: {
+  project: Project;
+  variant: "corporate" | "plain";
+  baseUrl: string;
+}) {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -50,7 +58,7 @@ export default function ProjectPdfDocument({ project, variant }: { project: Proj
 
         {project.image && (
           <Image
-            src={project.image.startsWith("http") ? project.image : `${process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"}${project.image}`}
+            src={project.image.startsWith("http") ? project.image : `${baseUrl}${project.image}`}
             style={styles.image}
           />
         )}
