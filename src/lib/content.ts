@@ -2,9 +2,9 @@ export const company = {
   name: "KAIVO",
   tagline: "El mercado inmobiliario tiene trampas. Nosotros las conocemos todas.",
   heroHeadline: "Tu dinero merece trabajar más inteligente",
-  phoneDisplay: "449 457 7941",
-  phoneE164: "524494577941",
-  whatsappUrl: "https://wa.me/524494577941",
+  phoneDisplay: "449 457 7041",
+  phoneE164: "524494577041",
+  whatsappUrl: "https://wa.me/524494577041",
   email: "kaivomx@gmail.com",
   location: "Aguascalientes, México",
   stats: [
